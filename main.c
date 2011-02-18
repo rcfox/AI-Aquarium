@@ -8,6 +8,7 @@
 int main (int argc, char* argv[])
 {
 	TCOD_console_init_root(80,60,"Test!",0,TCOD_RENDERER_GLSL);
+	TCOD_sys_set_fps(30);
 
 	map* m = map_new(80,60,'.');
 	map_randomize(m,6);
@@ -22,39 +23,34 @@ int main (int argc, char* argv[])
 		TCOD_list_push(entities,e);
 	}
 
+	int lookat = 0;
 	while(1)
 	{
-		entity* hero = TCOD_list_get(entities,0);
-		entity_look(hero);
-		map_draw(hero->known_map,NULL);
+		entity* e = TCOD_list_get(entities,lookat);
+		map_draw(e->known_map,NULL);
+//		for(int i = 0; i < TCOD_list_size(entities); ++i)
+		{
+//			entity* e = TCOD_list_get(entities,i);
+			entity_draw(e,NULL);
+		}
 		for(int i = 0; i < TCOD_list_size(entities); ++i)
 		{
 			entity* e = TCOD_list_get(entities,i);
-			entity_draw(e,NULL);
+
+			if(entity_at_destination(e))
+			{
+				int x,y;
+				map_random_free_spot(e->host_map,&x,&y);
+				entity_set_destination(e,x,y);
+			}			
+			entity_follow_path(e);
+			entity_look(e);
 		}
 		
 		TCOD_console_flush();
-		TCOD_key_t key = TCOD_console_wait_for_keypress(1);
+		TCOD_key_t key = TCOD_console_check_for_keypress(TCOD_KEY_PRESSED);
 		if(key.c == 'q') { break; }
-		if(key.vk == TCODK_UP) { entity_move(hero,hero->x,hero->y-1); }
-		if(key.vk == TCODK_DOWN) { entity_move(hero,hero->x,hero->y+1); }
-		if(key.vk == TCODK_LEFT) { entity_move(hero,hero->x-1,hero->y); }
-		if(key.vk == TCODK_RIGHT) { entity_move(hero,hero->x+1,hero->y); }
-		if(key.vk == TCODK_SPACE)
-		{
-			for(int i = 0; i < TCOD_list_size(entities); ++i)
-			{
-				entity* e = TCOD_list_get(entities,i);
-
-				if(entity_at_destination(e))
-				{
-					int x,y;
-					map_random_free_spot(e->host_map,&x,&y);
-					entity_set_destination(e,x,y);
-				}
-				entity_follow_path(e);
-			}
-		}
+		if(key.c == 'n') { lookat = (lookat+1)%TCOD_list_size(entities); }
 	}
 
 	while(!TCOD_list_is_empty(entities))
