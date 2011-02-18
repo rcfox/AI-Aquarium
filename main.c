@@ -35,7 +35,6 @@ int main (int argc, char* argv[])
 		TCOD_console_flush();
 		TCOD_key_t key = TCOD_console_wait_for_keypress(1);
 		if(key.c == 'q') { break; }
-		TCOD_console_put_char(NULL,40,30,key.c,TCOD_BKGND_NONE);
 	}
 
 	while(!TCOD_list_is_empty(entities))
