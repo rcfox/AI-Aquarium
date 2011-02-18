@@ -22,6 +22,13 @@ void free_map(map* m)
 	free(m->display);	
 }
 
+void copy_map_data(map* src, map* dest, int x, int y)
+{
+	set_map_data(dest,x,y,src->display->c,src->display->color,
+	             TCOD_map_is_transparent(src,x,y),
+	             TCOD_map_is_walkable(src,x,y));
+}
+
 void set_map_data(map* m, int x, int y, char c, TCOD_color_t color, bool transparent, bool walkable)
 {
 	int width = TCOD_map_get_width(m->data);
@@ -39,7 +46,6 @@ static bool draw_box(TCOD_bsp_t *node, void *userData)
 	{
 		colour = TCOD_color_RGB(node->x*3,node->y*3,node->h*3);
 		TCOD_list_push(*l,node);
-		printf("%d %d %d %d\n",node->x,node->y,node->h,node->w);
 	}
 	for(int y = 0; y < node->h; ++y)
 	{
