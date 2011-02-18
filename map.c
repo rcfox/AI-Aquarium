@@ -2,8 +2,9 @@
 #include <stdlib.h>
 #include "map.h"
 
-void create_map(map* m, int width, int height)
+map* map_new(int width, int height)
 {
+	map* m = malloc(sizeof(map));
 	m->data = TCOD_map_new(width,height);
 	m->display = malloc(width*height*sizeof(map_display));
 	TCOD_map_clear(m->data,1,1);
@@ -15,14 +16,16 @@ void create_map(map* m, int width, int height)
 			m->display[x+y*width].color = TCOD_white;
 		}
 	}
+	return m;
 }
 
-void free_map(map* m)
+void map_delete(map* m)
 {
-	free(m->display);	
+	free(m->display);
+	free(m);
 }
 
-void draw_map(map* m, TCOD_console_t console)
+void map_draw(map* m, TCOD_console_t console)
 {
 	int width = TCOD_map_get_width(m->data);
 	int height = TCOD_map_get_height(m->data);
@@ -37,14 +40,14 @@ void draw_map(map* m, TCOD_console_t console)
 	}
 }
 
-void copy_map_data(map* src, map* dest, int x, int y)
+void map_copy_data(map* src, map* dest, int x, int y)
 {
-	set_map_data(dest,x,y,src->display->c,src->display->color,
+	map_set_data(dest,x,y,src->display->c,src->display->color,
 	             TCOD_map_is_transparent(src,x,y),
 	             TCOD_map_is_walkable(src,x,y));
 }
 
-void set_map_data(map* m, int x, int y, char c, TCOD_color_t color, bool transparent, bool walkable)
+void map_set_data(map* m, int x, int y, char c, TCOD_color_t color, bool transparent, bool walkable)
 {
 	int width = TCOD_map_get_width(m->data);
 	TCOD_map_set_properties(m->data,x,y,transparent,walkable);
@@ -68,19 +71,19 @@ static bool draw_box(TCOD_bsp_t *node, void *userData)
 		{
 			for(int x = 0; x < node->w; ++x)
 			{
-				set_map_data(m,x+node->x,y+node->y,'#',colour,0,0);
+				map_set_data(m,x+node->x,y+node->y,'#',colour,0,0);
 			}
 		}
 		else
 		{
-			set_map_data(m,node->x,y+node->y,'#',colour,0,0);
-			set_map_data(m,node->x+node->w-1,y+node->y,'#',colour,0,0);
+			map_set_data(m,node->x,y+node->y,'#',colour,0,0);
+			map_set_data(m,node->x+node->w-1,y+node->y,'#',colour,0,0);
 		}
 	}
 	return true;
 }
 
-void randomize_map(map* m, int depth)
+void map_randomize(map* m, int depth)
 {
 	int width = TCOD_map_get_width(m->data);
 	int height = TCOD_map_get_height(m->data);
@@ -104,7 +107,7 @@ void randomize_map(map* m, int depth)
 		TCOD_line_init(x1,y1,x2,y2);
 		while(!TCOD_line_step(&x,&y))
 		{
-			set_map_data(m,x,y,' ',TCOD_white,1,1);
+			map_set_data(m,x,y,' ',TCOD_white,1,1);
 		}
 		if(TCOD_list_size(l) > 0)
 		{
@@ -116,7 +119,7 @@ void randomize_map(map* m, int depth)
 	TCOD_bsp_delete(bsp);
 }
 
-void random_free_map_spot(map* m, int* x, int* y)
+void map_random_free_spot(map* m, int* x, int* y)
 {
 	int width = TCOD_map_get_width(m->data);
 	int height = TCOD_map_get_height(m->data);

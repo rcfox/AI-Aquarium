@@ -15,16 +15,16 @@ typedef struct
 	TCOD_map_t data;
 } map;
 
-void create_map(map* m, int width, int height);
-void free_map(map* m);
+map* map_new(int width, int height);
+void map_delete(map* m);
 
-void draw_map(map* m, TCOD_console_t console);
+void map_draw(map* m, TCOD_console_t console);
 
-void copy_map_data(map* src, map* dest, int x, int y);
-void set_map_data(map* m, int x, int y, char c, TCOD_color_t color, bool transparent, bool walkable);
+void map_copy_data(map* src, map* dest, int x, int y);
+void map_set_data(map* m, int x, int y, char c, TCOD_color_t color, bool transparent, bool walkable);
 
-void randomize_map(map* m, int depth);
+void map_randomize(map* m, int depth);
 
-void random_free_map_spot(map* m, int* x, int* y);
+void map_random_free_spot(map* m, int* x, int* y);
 
 #endif
