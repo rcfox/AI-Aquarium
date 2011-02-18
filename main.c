@@ -24,6 +24,7 @@ int main (int argc, char* argv[])
 
 	while(1)
 	{
+		entity* hero = TCOD_list_get(entities,0);
 		map_draw(m,NULL);
 		for(int i = 0; i < TCOD_list_size(entities); ++i)
 		{
@@ -34,6 +35,10 @@ int main (int argc, char* argv[])
 		TCOD_console_flush();
 		TCOD_key_t key = TCOD_console_wait_for_keypress(1);
 		if(key.c == 'q') { break; }
+		if(key.vk == TCODK_UP) { entity_move(hero,hero->x,hero->y-1); }
+		if(key.vk == TCODK_DOWN) { entity_move(hero,hero->x,hero->y+1); }
+		if(key.vk == TCODK_LEFT) { entity_move(hero,hero->x-1,hero->y); }
+		if(key.vk == TCODK_RIGHT) { entity_move(hero,hero->x+1,hero->y); }
 	}
 
 	while(!TCOD_list_is_empty(entities))
