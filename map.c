@@ -22,6 +22,21 @@ void free_map(map* m)
 	free(m->display);	
 }
 
+void draw_map(map* m, TCOD_console_t console)
+{
+	int width = TCOD_map_get_width(m->data);
+	int height = TCOD_map_get_height(m->data);
+	for(int y = 0; y < height; ++y)
+	{
+		for(int x = 0; x < width; ++x)
+		{
+			char c = m->display[x+y*width].c;
+			TCOD_color_t color = m->display[x+y*width].color;
+			TCOD_console_put_char_ex(console,x,y,c,color,TCOD_black);
+		}
+	}
+}
+
 void copy_map_data(map* src, map* dest, int x, int y)
 {
 	set_map_data(dest,x,y,src->display->c,src->display->color,

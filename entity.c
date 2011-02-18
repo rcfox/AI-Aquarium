@@ -17,3 +17,8 @@ void free_entity(entity* e)
 	free_map(&(e->map));
 	free(e);
 }
+
+void draw_entity(entity* e, TCOD_console_t console)
+{
+	TCOD_console_put_char_ex(console,e->x,e->y,e->c,e->color,TCOD_black);
+}

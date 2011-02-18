@@ -18,6 +18,8 @@ typedef struct
 void create_map(map* m, int width, int height);
 void free_map(map* m);
 
+void draw_map(map* m, TCOD_console_t console);
+
 void copy_map_data(map* src, map* dest, int x, int y);
 void set_map_data(map* m, int x, int y, char c, TCOD_color_t color, bool transparent, bool walkable);
 

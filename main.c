@@ -25,21 +25,11 @@ int main (int argc, char* argv[])
 
 	while(1)
 	{
-		int width = TCOD_map_get_width(m.data);
-		int height = TCOD_map_get_height(m.data);
-		for(int y = 0; y < height; ++y)
-		{
-			for(int x = 0; x < width; ++x)
-			{
-				char c = m.display[x+y*width].c;
-				TCOD_color_t color = m.display[x+y*width].color;
-				TCOD_console_put_char_ex(NULL,x,y,c,color,TCOD_black);
-			}
-		}
+		draw_map(&m,NULL);
 		for(int i = 0; i < TCOD_list_size(entities); ++i)
 		{
 			entity* e = TCOD_list_get(entities,i);
-			TCOD_console_put_char_ex(NULL,e->x,e->y,e->c,e->color,TCOD_black);
+			draw_entity(e,NULL);
 		}
 		
 		TCOD_console_flush();
