@@ -10,11 +10,13 @@ entity* entity_new(map* m, int x, int y, char c, TCOD_color_t color)
 	e->color = color;
 	e->host_map = m;
 	e->known_map = map_new(TCOD_map_get_width(m->data),TCOD_map_get_height(m->data),' ');
+	e->path = TCOD_path_new_using_map(e->known_map->data,1.41f);
 	return e;
 }
 
 void entity_delete(entity* e)
 {
+	TCOD_path_delete(e->path);
 	map_delete(e->known_map);
 	free(e);
 }
@@ -48,4 +50,25 @@ void entity_look(entity* e)
 			}
 		}
 	}
+}
+
+bool entity_set_destination(entity* e, int x, int y)
+{
+	return TCOD_path_compute(e->path,e->x,e->y,x,y);
+}
+
+bool entity_follow_path(entity* e)
+{
+	int x,y;
+	bool ret = TCOD_path_walk(e->path,&x,&y,1);
+	if(ret)
+	{
+		ret &= entity_move(e,x,y);
+	}
+	return ret;
+}
+
+bool entity_at_destination(entity* e)
+{
+	return TCOD_path_is_empty(e->path);
 }

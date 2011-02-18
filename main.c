@@ -40,6 +40,21 @@ int main (int argc, char* argv[])
 		if(key.vk == TCODK_DOWN) { entity_move(hero,hero->x,hero->y+1); }
 		if(key.vk == TCODK_LEFT) { entity_move(hero,hero->x-1,hero->y); }
 		if(key.vk == TCODK_RIGHT) { entity_move(hero,hero->x+1,hero->y); }
+		if(key.vk == TCODK_SPACE)
+		{
+			for(int i = 0; i < TCOD_list_size(entities); ++i)
+			{
+				entity* e = TCOD_list_get(entities,i);
+
+				if(entity_at_destination(e))
+				{
+					int x,y;
+					map_random_free_spot(e->host_map,&x,&y);
+					entity_set_destination(e,x,y);
+				}
+				entity_follow_path(e);
+			}
+		}
 	}
 
 	while(!TCOD_list_is_empty(entities))

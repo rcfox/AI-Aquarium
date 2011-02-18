@@ -6,12 +6,13 @@
 
 typedef struct
 {
-	int x;
+	int x; // Position in the map
 	int y;
-	TCOD_color_t color;
-	map* host_map;
-	map* known_map;
-	char c;
+	TCOD_color_t color; // Colour to draw with
+	map* host_map; // The real map the entity lives in
+	map* known_map; // What the entity knows about host_map
+	TCOD_path_t path; // The path that the entity is currently following
+	char c; // The character to represent the entity
 } entity;
 
 entity* entity_new(map* m, int x, int y, char c, TCOD_color_t color);
@@ -21,5 +22,9 @@ void entity_draw(entity* e, TCOD_console_t console);
 
 bool entity_move(entity* e, int x, int y);
 void entity_look(entity* e);
+
+bool entity_set_destination(entity* e, int x, int y);
+bool entity_follow_path(entity* e);
+bool entity_at_destination(entity* e);
 
 #endif
