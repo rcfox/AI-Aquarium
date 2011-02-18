@@ -100,3 +100,13 @@ void randomize_map(map* m, int depth)
 	TCOD_list_delete(l);
 	TCOD_bsp_delete(bsp);
 }
+
+void random_free_map_spot(map* m, int* x, int* y)
+{
+	int width = TCOD_map_get_width(m->data);
+	int height = TCOD_map_get_height(m->data);
+	do {
+		*x = rand()%width;
+		*y = rand()%height;
+	} while(!TCOD_map_is_walkable(m->data,*x,*y));
+}

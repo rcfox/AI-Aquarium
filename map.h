@@ -23,4 +23,6 @@ void set_map_data(map* m, int x, int y, char c, TCOD_color_t color, bool transpa
 
 void randomize_map(map* m, int depth);
 
+void random_free_map_spot(map* m, int* x, int* y);
+
 #endif
