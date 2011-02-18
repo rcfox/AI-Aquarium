@@ -20,5 +20,6 @@ void entity_delete(entity* e);
 void entity_draw(entity* e, TCOD_console_t console);
 
 bool entity_move(entity* e, int x, int y);
+void entity_look(entity* e);
 
 #endif

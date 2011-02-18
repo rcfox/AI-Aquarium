@@ -9,7 +9,7 @@ int main (int argc, char* argv[])
 {
 	TCOD_console_init_root(80,60,"Test!",0,TCOD_RENDERER_GLSL);
 
-	map* m = map_new(80,60);
+	map* m = map_new(80,60,'.');
 	map_randomize(m,6);
 
 	int num_entities = 5;
@@ -25,7 +25,8 @@ int main (int argc, char* argv[])
 	while(1)
 	{
 		entity* hero = TCOD_list_get(entities,0);
-		map_draw(m,NULL);
+		entity_look(hero);
+		map_draw(hero->known_map,NULL);
 		for(int i = 0; i < TCOD_list_size(entities); ++i)
 		{
 			entity* e = TCOD_list_get(entities,i);
