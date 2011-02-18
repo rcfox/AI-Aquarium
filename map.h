@@ -15,7 +15,7 @@ typedef struct
 	TCOD_map_t data;
 } map;
 
-map* map_new(int width, int height);
+map* map_new(int width, int height, char init_char);
 void map_delete(map* m);
 
 void map_draw(map* m, TCOD_console_t console);

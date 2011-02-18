@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include "map.h"
 
-map* map_new(int width, int height)
+map* map_new(int width, int height, char init_char)
 {
 	map* m = malloc(sizeof(map));
 	m->data = TCOD_map_new(width,height);
@@ -12,7 +12,7 @@ map* map_new(int width, int height)
 	{
 		for(int x = 0; x < width; ++x)
 		{
-			m->display[x+y*width].c = ' ';
+			m->display[x+y*width].c = init_char;
 			m->display[x+y*width].color = TCOD_white;
 		}
 	}
@@ -42,9 +42,10 @@ void map_draw(map* m, TCOD_console_t console)
 
 void map_copy_data(map* src, map* dest, int x, int y)
 {
-	map_set_data(dest,x,y,src->display->c,src->display->color,
-	             TCOD_map_is_transparent(src,x,y),
-	             TCOD_map_is_walkable(src,x,y));
+	map_display md = src->display[x+TCOD_map_get_width(src->data)*y];
+	map_set_data(dest,x,y,md.c,md.color,
+	             TCOD_map_is_transparent(src->data,x,y),
+	             TCOD_map_is_walkable(src->data,x,y));
 }
 
 void map_set_data(map* m, int x, int y, char c, TCOD_color_t color, bool transparent, bool walkable)
@@ -107,7 +108,7 @@ void map_randomize(map* m, int depth)
 		TCOD_line_init(x1,y1,x2,y2);
 		while(!TCOD_line_step(&x,&y))
 		{
-			map_set_data(m,x,y,' ',TCOD_white,1,1);
+			map_set_data(m,x,y,'.',TCOD_white,1,1);
 		}
 		if(TCOD_list_size(l) > 0)
 		{
