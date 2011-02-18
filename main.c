@@ -9,7 +9,7 @@ int main (int argc, char* argv[])
 
 	map m;
 	create_map(&m,80,60);
-	randomize_map(&m);
+	randomize_map(&m,6);
 	while(1)
 	{
 		int width = TCOD_map_get_width(m.data);

@@ -59,15 +59,13 @@ static bool draw_box(TCOD_bsp_t *node, void *userData)
 	return true;
 }
 
-void randomize_map(map* m)
+void randomize_map(map* m, int depth)
 {
 	int width = TCOD_map_get_width(m->data);
 	int height = TCOD_map_get_height(m->data);
-	int depth = 6;
 	TCOD_bsp_t* bsp = TCOD_bsp_new_with_size(0,0,width,height);
-	TCOD_list_t l = TCOD_list_new(1<<depth);
-
-	void* args[] = {m,&l};
+	TCOD_list_t l = TCOD_list_new(1<<depth); // The BSP will have 2^depth leaf nodes
+	void* args[] = {m,&l}; // Send these to draw_box()
 
 	TCOD_bsp_split_recursive(bsp,NULL,depth,5,5,1.5f,1.5f);
 	TCOD_bsp_traverse_pre_order(bsp, &draw_box, args);
@@ -89,7 +87,7 @@ void randomize_map(map* m)
 		}
 		if(TCOD_list_size(l) > 0)
 		{
-			TCOD_list_push(l,r2);
+			TCOD_list_push(l,r2); // Pushing r1 seems to make all paths come from one place.
 		}
 	}
 
