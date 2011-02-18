@@ -13,7 +13,7 @@ map* map_new(int width, int height, char init_char)
 		for(int x = 0; x < width; ++x)
 		{
 			m->display[x+y*width].c = init_char;
-			m->display[x+y*width].color = TCOD_white;
+			m->display[x+y*width].color = TCOD_grey;
 		}
 	}
 	return m;
@@ -108,7 +108,7 @@ void map_randomize(map* m, int depth)
 		TCOD_line_init(x1,y1,x2,y2);
 		while(!TCOD_line_step(&x,&y))
 		{
-			map_set_data(m,x,y,'.',TCOD_white,1,1);
+			map_set_data(m,x,y,'.',TCOD_grey,1,1);
 		}
 		if(TCOD_list_size(l) > 0)
 		{
