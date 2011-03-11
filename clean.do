@@ -1,2 +1,2 @@
-rm -f *.o
+find . -name '*.o' -delete
 rm -f aquarium
