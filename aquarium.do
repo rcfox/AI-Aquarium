@@ -1,5 +1,9 @@
-DEPS="main.o map.o entity.o"
+for file in `find . -name 'libtcod*' -prune -o -name '*.c' -print`; do
+	DEPS="$DEPS ${file%.c}.o ";
+done
+
 LIBS="-L./libtcod-1.5.1 -ltcod"
+CFLAGS=""
 
 redo-ifchange $DEPS
 
