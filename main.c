@@ -14,28 +14,25 @@ int main (int argc, char* argv[])
 	map_randomize(m,6);
 
 	int num_entities = 5;
-	TCOD_list_t entities = TCOD_list_new(num_entities);
 	for(int i = 0; i < num_entities; ++i)
 	{
 		int x, y;
 		map_random_free_spot(m,&x,&y);
-		entity* e = entity_new(m,x,y,'@',TCOD_color_RGB(rand()%255,rand()%255,rand()%255));
-		TCOD_list_push(entities,e);
+		entity* e = entity_new(x,y,'@',TCOD_color_RGB(rand()%255,rand()%255,rand()%255));
+		map_add_entity(m,e);
 	}
 
 	int lookat = 0;
 	while(1)
 	{
-		entity* e = TCOD_list_get(entities,lookat);
+		entity* e = TCOD_list_get(m->entities,lookat);
 		map_draw(e->known_map,NULL);
-//		for(int i = 0; i < TCOD_list_size(entities); ++i)
+		entity_draw(e,NULL);
+
+		int num_entities = TCOD_list_size(m->entities);
+		for(int i = 0; i < num_entities; ++i)
 		{
-//			entity* e = TCOD_list_get(entities,i);
-			entity_draw(e,NULL);
-		}
-		for(int i = 0; i < TCOD_list_size(entities); ++i)
-		{
-			entity* e = TCOD_list_get(entities,i);
+			entity* e = TCOD_list_get(m->entities,i);
 
 			if(entity_at_destination(e))
 			{
@@ -50,15 +47,8 @@ int main (int argc, char* argv[])
 		TCOD_console_flush();
 		TCOD_key_t key = TCOD_console_check_for_keypress(TCOD_KEY_PRESSED);
 		if(key.c == 'q') { break; }
-		if(key.c == 'n') { lookat = (lookat+1)%TCOD_list_size(entities); }
+		if(key.c == 'n') { lookat = (lookat+1)%TCOD_list_size(m->entities); }
 	}
-
-	while(!TCOD_list_is_empty(entities))
-	{
-		entity* e = TCOD_list_pop(entities);
-		entity_delete(e);
-	}
-	TCOD_list_delete(entities);
 	
 	map_delete(m);
 }

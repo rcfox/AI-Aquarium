@@ -1,6 +1,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include "map.h"
+#include "entity.h"
 
 map* map_new(int width, int height, char init_char)
 {
@@ -16,13 +17,37 @@ map* map_new(int width, int height, char init_char)
 			m->display[x+y*width].color = TCOD_grey;
 		}
 	}
+	m->entities = TCOD_list_new();
 	return m;
 }
 
 void map_delete(map* m)
 {
-	free(m->display);
-	free(m);
+	if(m)
+	{
+		while(!TCOD_list_is_empty(m->entities))
+		{
+			entity_delete(TCOD_list_pop(m->entities));
+		}
+		TCOD_list_delete(m->entities);
+		free(m->display);
+		free(m);
+	}
+}
+
+// Adds entity to the end of the list.
+void map_add_entity(map* m, entity* e)
+{
+	entity_set_map(e,m);
+	TCOD_list_push(m->entities,e);
+}
+
+// Removes entity from list without preserving list order.
+// Deletes the entity!
+void map_remove_entity(map* m, entity* e)
+{
+	TCOD_list_remove_fast(m->entities,e);
+	entity_delete(e);
 }
 
 void map_draw(map* m, TCOD_console_t console)

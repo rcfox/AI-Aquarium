@@ -1,16 +1,17 @@
 #include <stdlib.h>
 #include "entity.h"
+#include "map.h"
 
-entity* entity_new(map* m, int x, int y, char c, TCOD_color_t color)
+entity* entity_new(int x, int y, char c, TCOD_color_t color)
 {
 	entity* e = malloc(sizeof(entity));
 	e->x = x;
 	e->y = y;
 	e->c = c;
 	e->color = color;
-	e->host_map = m;
-	e->known_map = map_new(TCOD_map_get_width(m->data),TCOD_map_get_height(m->data),' ');
-	e->path = TCOD_path_new_using_map(e->known_map->data,1.41f);
+	e->host_map = NULL;
+	e->known_map = NULL;
+	e->path = NULL;
 	return e;
 }
 
@@ -19,6 +20,18 @@ void entity_delete(entity* e)
 	TCOD_path_delete(e->path);
 	map_delete(e->known_map);
 	free(e);
+}
+
+void entity_set_map(entity* e, map* m)
+{
+	e->host_map = m;
+	if(e->known_map) map_delete(e->known_map);
+	if(e->path) TCOD_path_delete(e->path);
+	if(m)
+	{
+		e->known_map = map_new(TCOD_map_get_width(m->data),TCOD_map_get_height(m->data),' ');
+		e->path = TCOD_path_new_using_map(e->known_map->data,1.41f);
+	}
 }
 
 void entity_draw(entity* e, TCOD_console_t console)
@@ -39,6 +52,7 @@ bool entity_move(entity* e, int x, int y)
 void entity_look(entity* e)
 {
 	int radius = 5;
+	
 	TCOD_map_compute_fov(e->host_map->data,e->x,e->y,radius,1,FOV_BASIC);
 	for(int y = -radius; y < radius; ++y)
 	{
