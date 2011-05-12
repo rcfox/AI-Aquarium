@@ -4,6 +4,7 @@
 #include <libtcod.h>
 
 struct map;
+struct goal;
 
 typedef struct entity
 {
@@ -13,6 +14,7 @@ typedef struct entity
 	struct map* known_map; // What the entity knows about host_map
 	TCOD_path_t path; // The path that the entity is currently following
 	TCOD_list_t seen; // Other seen entities;
+	struct goal* goal;
 
 	TCOD_color_t color; // Colour to draw with
 	char c; // The character to represent the entity

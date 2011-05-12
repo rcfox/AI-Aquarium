@@ -3,6 +3,7 @@
 #include "entity.h"
 #include "map.h"
 #include "util.h"
+#include "goal.h"
 
 entity* entity_new(int x, int y, char c, TCOD_color_t color)
 {
@@ -15,13 +16,16 @@ entity* entity_new(int x, int y, char c, TCOD_color_t color)
 	e->known_map = NULL;
 	e->path = NULL;
 	e->seen = TCOD_list_new();
+	e->goal = NULL;
 	return e;
 }
 
 void entity_delete(entity* e)
 {
-	TCOD_path_delete(e->path);
-	map_delete(e->known_map);
+	if(e->path) TCOD_path_delete(e->path);
+	if(e->known_map) map_delete(e->known_map);
+	if(e->goal) goal_delete(e->goal);
+	TCOD_list_delete(e->seen);
 	free(e);
 }
 
