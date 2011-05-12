@@ -1,6 +1,8 @@
 #include <stdlib.h>
+#include <libtcod.h>
 #include "entity.h"
 #include "map.h"
+#include "util.h"
 
 entity* entity_new(int x, int y, char c, TCOD_color_t color)
 {
@@ -12,6 +14,7 @@ entity* entity_new(int x, int y, char c, TCOD_color_t color)
 	e->host_map = NULL;
 	e->known_map = NULL;
 	e->path = NULL;
+	e->seen = TCOD_list_new();
 	return e;
 }
 
@@ -52,18 +55,38 @@ bool entity_move(entity* e, int x, int y)
 void entity_look(entity* e)
 {
 	int radius = 5;
-	
-	TCOD_map_compute_fov(e->host_map->data,e->x,e->y,radius,1,FOV_BASIC);
-	for(int y = -radius; y < radius; ++y)
+	TCOD_list_t nearby = TCOD_list_new();
+	foreach(entity,e->host_map->entities)
 	{
-		for(int x = -radius; x < radius; ++x)
+		entity* o = *itr;
+		int dx = (e->x - o->x);
+		int dy = (e->y - o->y);
+		if(dx*dx+dy*dy <= radius*radius)
+		{
+			TCOD_list_push(nearby,o);
+		}
+	}
+	TCOD_list_clear(e->seen);
+	TCOD_map_compute_fov(e->host_map->data,e->x,e->y,radius,1,FOV_BASIC);
+	for(int y = -radius; y <= radius; ++y)
+	{
+		for(int x = -radius; x <= radius; ++x)
 		{
 			if(TCOD_map_is_in_fov(e->host_map->data,e->x+x,e->y+y))
 			{				
 				map_copy_data(e->host_map,e->known_map,e->x+x,e->y+y);
+				
+				foreach(entity,nearby)
+				{
+					if((*itr)->x == x+e->x && (*itr)->y == y+e->y)
+					{
+						TCOD_list_push(e->seen,*itr);
+					}
+				}
 			}
 		}
 	}
+	TCOD_list_delete(nearby);
 }
 
 bool entity_set_destination(entity* e, int x, int y)

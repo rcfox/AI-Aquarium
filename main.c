@@ -4,6 +4,7 @@
 #include <libtcod.h>
 #include "map.h"
 #include "entity.h"
+#include "util.h"
 
 int main (int argc, char* argv[])
 {
@@ -27,7 +28,10 @@ int main (int argc, char* argv[])
 	{
 		entity* e = TCOD_list_get(m->entities,lookat);
 		map_draw(e->known_map,NULL);
-		entity_draw(e,NULL);
+		foreach(entity,e->seen)
+		{
+			entity_draw(*itr,NULL);
+		}
 
 		int num_entities = TCOD_list_size(m->entities);
 		for(int i = 0; i < num_entities; ++i)
