@@ -43,9 +43,9 @@ int main (int argc, char* argv[])
 				int x,y;
 				map_random_free_spot(e->host_map,&x,&y);
 				entity_set_destination(e,x,y);
-			}			
-			entity_follow_path(e);
+			}
 			entity_look(e);
+			entity_follow_path(e);
 		}
 		
 		TCOD_console_flush();
