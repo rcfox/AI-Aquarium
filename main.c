@@ -24,20 +24,17 @@ int main (int argc, char* argv[])
 	}
 
 	int lookat = 0;
+	entity* e = TCOD_list_get(m->entities,lookat);
 	while(1)
-	{
-		entity* e = TCOD_list_get(m->entities,lookat);
+	{		
 		map_draw(e->known_map,NULL);
 		foreach(entity,e->seen)
 		{
 			entity_draw(*itr,NULL);
 		}
-
-		int num_entities = TCOD_list_size(m->entities);
-		for(int i = 0; i < num_entities; ++i)
+		foreach(entity,m->entities)
 		{
-			entity* e = TCOD_list_get(m->entities,i);
-
+			entity* e = *itr;
 			if(entity_at_destination(e))
 			{
 				int x,y;
@@ -51,7 +48,8 @@ int main (int argc, char* argv[])
 		TCOD_console_flush();
 		TCOD_key_t key = TCOD_console_check_for_keypress(TCOD_KEY_PRESSED);
 		if(key.c == 'q') { break; }
-		if(key.c == 'n') { lookat = (lookat+1)%TCOD_list_size(m->entities); }
+		if(key.c == 'n') { lookat = (lookat+1)%TCOD_list_size(m->entities);
+			               e = TCOD_list_get(m->entities,lookat); }
 	}
 	
 	map_delete(m);
