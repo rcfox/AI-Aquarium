@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include "map.h"
 #include "entity.h"
+#include "util.h"
 
 map* map_new(int width, int height, char init_char)
 {
@@ -25,9 +26,9 @@ void map_delete(map* m)
 {
 	if(m)
 	{
-		while(!TCOD_list_is_empty(m->entities))
+		foreach(entity,m->entities)			
 		{
-			entity_delete(TCOD_list_pop(m->entities));
+			entity_delete(*itr);
 		}
 		TCOD_list_delete(m->entities);
 		free(m->display);
