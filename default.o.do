@@ -1,7 +1,7 @@
 redo-ifchange $1.c
 
 CFLAGS="-std=gnu99 -O3 -Wall"
-INCLUDE="-I./libtcod-1.5.1/include"
+INCLUDE="-I$BASEDIR/libtcod-1.5.1/include -I$BASEDIR"
 
 gcc $CFLAGS $INCLUDE -MD -MF $1.d -c -o $3 $1.c
 

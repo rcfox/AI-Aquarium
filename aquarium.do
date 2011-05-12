@@ -5,6 +5,6 @@ done
 LIBS="-L./libtcod-1.5.1 -ltcod"
 CFLAGS=""
 
-redo-ifchange $DEPS
+BASEDIR=`pwd` redo-ifchange $DEPS
 
 gcc $DEPS $LIBS -o $3
