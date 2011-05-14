@@ -2,6 +2,7 @@
 #include <math.h>
 #include "goals/explore.h"
 #include "goals/get_item.h"
+#include "goals/move.h"
 #include "goal.h"
 #include "entity.h"
 #include "map.h"
@@ -18,7 +19,7 @@ static void find_closest_unexplored(entity* e, int* x, int* y)
 		{
 			int i = e->x + r*cos(a);
 			int j = e->y + r*sin(a);
-			if(i < width && i >= 0 && j < height && j >=0)
+			if(i < width && i > 0 && j < height && j > 0)
 			{
 				if(e->known_map->display[i+width*j].c == ' ')
 				{
@@ -47,7 +48,7 @@ static bool pre_explore_goal(entity* e, TCOD_list_t params)
 	find_closest_unexplored(e,&x,&y);
 	if(x != -1 && y != -1)
 	{
-		entity_set_destination(e,x,y);
+		entity_add_goal(e,goal_new_move(e,x,y));
 		return true;
 	}
 	return false;
@@ -55,11 +56,6 @@ static bool pre_explore_goal(entity* e, TCOD_list_t params)
 
 static bool explore_goal(entity* e, TCOD_list_t params)
 {
-	if(!entity_at_destination(e))
-	{
-		entity_follow_path(e);
-		return false;
-	}
 	return !pre_explore_goal(e,params);
 }
 
