@@ -14,6 +14,8 @@ typedef struct entity
 	struct map* known_map; // What the entity knows about host_map
 	TCOD_path_t path; // The path that the entity is currently following
 	TCOD_list_t seen; // Other seen entities;
+	TCOD_list_t seen_items;
+	
 	TCOD_list_t goal_stack;
 
 	TCOD_color_t color; // Colour to draw with

@@ -2,6 +2,7 @@
 #include <libtcod.h>
 #include "entity.h"
 #include "map.h"
+#include "item.h"
 #include "util.h"
 #include "goal.h"
 #include "goals/nothing.h"
@@ -17,6 +18,7 @@ entity* entity_new(int x, int y, char c, TCOD_color_t color)
 	e->known_map = NULL;
 	e->path = NULL;
 	e->seen = TCOD_list_new();
+	e->seen_items = TCOD_list_new();
 	e->goal_stack = TCOD_list_new();
 
 	// Make sure the entity always has something to do so that we don't crash!
@@ -31,8 +33,15 @@ void entity_delete(entity* e)
 		goal_delete(*itr);
 	}
 	if(e->path) TCOD_path_delete(e->path);
-	if(e->known_map) map_delete(e->known_map);
+	if(e->known_map)
+	{
+		// The known_map doesn't own the items, so we don't want to
+		// delete the items twice!
+		TCOD_list_clear(e->known_map->items);
+		map_delete(e->known_map);
+	}
 	TCOD_list_delete(e->seen);
+	TCOD_list_delete(e->seen_items);
 	TCOD_list_delete(e->goal_stack);
 	free(e);
 }
@@ -79,7 +88,21 @@ void entity_look(entity* e)
 		}
 	}
 	TCOD_list_clear(e->seen);
+	TCOD_list_t nearby_items = TCOD_list_new();
+	foreach(item,e->host_map->items)
+	{
+		item* o = *itr;
+		int dx = (e->x - o->x);
+		int dy = (e->y - o->y);
+		if(dx*dx+dy*dy <= radius*radius)
+		{
+			TCOD_list_push(nearby_items,o);
+		}
+	}
+	TCOD_list_clear(e->seen_items);
+	
 	TCOD_map_compute_fov(e->host_map->data,e->x,e->y,radius,1,FOV_BASIC);
+	
 	for(int y = -radius; y <= radius; ++y)
 	{
 		for(int x = -radius; x <= radius; ++x)
@@ -93,6 +116,13 @@ void entity_look(entity* e)
 					if((*itr)->x == x+e->x && (*itr)->y == y+e->y)
 					{
 						TCOD_list_push(e->seen,*itr);
+					}
+				}
+				foreach(item,nearby_items)
+				{
+					if((*itr)->x == x+e->x && (*itr)->y == y+e->y)
+					{
+						TCOD_list_push(e->seen_items,*itr);
 					}
 				}
 			}

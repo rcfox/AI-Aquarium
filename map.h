@@ -4,6 +4,7 @@
 #include <libtcod.h>
 
 struct entity;
+struct item;
 
 typedef struct map_display
 {
@@ -16,6 +17,7 @@ typedef struct map
 	map_display* display;
 	TCOD_map_t data;
 	TCOD_list_t entities;
+	TCOD_list_t items;
 } map;
 
 map* map_new(int width, int height, char init_char);
@@ -28,6 +30,9 @@ void map_set_data(map* m, int x, int y, char c, TCOD_color_t color, bool transpa
 
 void map_add_entity(map* m, struct entity* e);
 void map_remove_entity(map* m, struct entity* e);
+
+void map_add_item(map* m, struct item* i);
+void map_remove_item(map* m, struct item* i);
 
 void map_randomize(map* m, int depth);
 

@@ -4,6 +4,7 @@
 #include <libtcod.h>
 #include "map.h"
 #include "entity.h"
+#include "item.h"
 #include "util.h"
 #include "goal.h"
 #include "goals/move.h"
@@ -18,18 +19,25 @@ int main (int argc, char* argv[])
 	map_randomize(m,6);
 
 	int num_entities = 5;
-	for(int i = 0; i < num_entities; ++i)
+	for(int a = 0; a < num_entities; ++a)
 	{
 		int x, y;
 		map_random_free_spot(m,&x,&y);
 		entity* e = entity_new(x,y,'@',TCOD_color_RGB(rand()%255,rand()%255,rand()%255));
-		map_add_entity(m,e);		
+		map_add_entity(m,e);
 		
-		goal* g = goal_new_move(e,3,3);
-		goal_add_subgoal(g,goal_new_move(e,78,58));
-		goal_add_subgoal(g,goal_new_move(e,78,3));
-		goal_add_subgoal(g,goal_new_move(e,3,58));
-		entity_add_goal(e,g);
+		/* goal* g = goal_new_move(e,3,3); */
+		/* goal_add_subgoal(g,goal_new_move(e,78,58)); */
+		/* goal_add_subgoal(g,goal_new_move(e,78,3)); */
+		/* goal_add_subgoal(g,goal_new_move(e,3,58)); */
+		entity_add_goal(e,goal_new_explore(e));
+	}
+	for(int a = 0; a < 50; ++a)
+	{
+		int x, y;
+		map_random_free_spot(m,&x,&y);
+		item* i = item_new(x,y,'$',TCOD_green,0,NULL);
+		map_add_item(m,i);
 	}
 
 	int lookat = 0;
@@ -40,6 +48,10 @@ int main (int argc, char* argv[])
 		foreach(entity,e->seen)
 		{
 			entity_draw(*itr,NULL);
+		}
+		foreach(item,e->seen_items)
+		{
+			item_draw(*itr,NULL);
 		}
 		foreach(entity,m->entities)
 		{

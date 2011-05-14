@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include "map.h"
 #include "entity.h"
+#include "item.h"
 #include "util.h"
 
 map* map_new(int width, int height, char init_char)
@@ -19,6 +20,7 @@ map* map_new(int width, int height, char init_char)
 		}
 	}
 	m->entities = TCOD_list_new();
+	m->items = TCOD_list_new();
 	return m;
 }
 
@@ -31,6 +33,11 @@ void map_delete(map* m)
 			entity_delete(*itr);
 		}
 		TCOD_list_delete(m->entities);
+		foreach(item,m->items)			
+		{
+			item_delete(*itr);
+		}
+		TCOD_list_delete(m->items);
 		free(m->display);
 		free(m);
 	}
@@ -49,6 +56,19 @@ void map_remove_entity(map* m, entity* e)
 {
 	TCOD_list_remove_fast(m->entities,e);
 	entity_delete(e);
+}
+
+// Adds item to the end of the list.
+void map_add_item(map* m, item* i)
+{
+	TCOD_list_push(m->items,i);
+}
+
+// Removes item from list without preserving list order.
+// Doesn't delete the item!
+void map_remove_item(map* m, item* i)
+{
+	TCOD_list_remove_fast(m->items,i);
 }
 
 void map_draw(map* m, TCOD_console_t console)
