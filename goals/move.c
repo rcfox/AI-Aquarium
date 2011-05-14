@@ -2,7 +2,7 @@
 #include "goals/move.h"
 #include "entity.h"
 
-bool pre_move_goal(entity* e, TCOD_list_t params)
+static bool pre_move_goal(entity* e, TCOD_list_t params)
 {
 	int x = (long)TCOD_list_get(params,0);
 	int y = (long)TCOD_list_get(params,1);
@@ -10,7 +10,7 @@ bool pre_move_goal(entity* e, TCOD_list_t params)
 	return true;
 }
 
-bool move_goal(entity* e, TCOD_list_t params)
+static bool move_goal(entity* e, TCOD_list_t params)
 {
 	if(!entity_at_destination(e))
 	{
@@ -20,10 +20,15 @@ bool move_goal(entity* e, TCOD_list_t params)
 	return true;
 }
 
-bool post_move_goal(entity* e, TCOD_list_t params)
+static bool post_move_goal(entity* e, TCOD_list_t params)
 {
 	int x = (long)TCOD_list_get(params,0);
 	int y = (long)TCOD_list_get(params,1);
 	printf("Arrived at (%d,%d)!\n",x,y);
 	return true;
+}
+
+goal* goal_new_move(struct entity* owner, int x, int y)
+{
+	return goal_new(owner,&pre_move_goal,&move_goal,&post_move_goal,x,y,NULL);
 }

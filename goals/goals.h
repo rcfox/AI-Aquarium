@@ -1,5 +1,5 @@
-#ifndef GOAL_H
-#define GOAL_H
+#ifndef GOAL_GOALS_H
+#define GOAL_GOALS_H
 
 #include <libtcod.h>
 #include "goal.h"

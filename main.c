@@ -25,7 +25,7 @@ int main (int argc, char* argv[])
 		entity* e = entity_new(x,y,'@',TCOD_color_RGB(rand()%255,rand()%255,rand()%255));
 		map_add_entity(m,e);
 
-		e->goal = GOAL(e,explore);
+		e->goal = goal_new_explore(e);
 	}
 
 	int lookat = 0;
