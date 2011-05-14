@@ -57,12 +57,11 @@ bool goal_do(goal* g)
 	}
 	if(ret && g->post_goal)
 	{
-		ret &= g->post_goal(g->owner,g->parameters);
-		
-		if(ret)
-		{
-			goal_delete(TCOD_list_pop(g->owner->goal_stack));
-		}
+		ret &= g->post_goal(g->owner,g->parameters);	   
+	}
+	if(ret)
+	{
+		goal_delete(TCOD_list_pop(g->owner->goal_stack));
 	}
 	return ret;
 }
