@@ -5,6 +5,7 @@
 
 struct map;
 struct goal;
+struct item;
 
 typedef struct entity
 {
@@ -15,6 +16,8 @@ typedef struct entity
 	TCOD_path_t path; // The path that the entity is currently following
 	TCOD_list_t seen; // Other seen entities;
 	TCOD_list_t seen_items;
+
+	TCOD_list_t inventory;
 	
 	TCOD_list_t goal_stack;
 
@@ -38,5 +41,8 @@ bool entity_at_destination(entity* e);
 
 void entity_add_goal(entity* e, struct goal* g);
 void entity_do_goal(entity* e);
+
+void entity_get_item(entity* e, struct item* i);
+void entity_drop_item(entity* e, struct item* i);
 
 #endif

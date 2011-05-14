@@ -37,7 +37,7 @@ int main (int argc, char* argv[])
 		int x, y;
 		map_random_free_spot(m,&x,&y);
 		item* i = item_new(x,y,'$',TCOD_green,0,NULL);
-		map_add_item(m,i);
+		item_set_map(i,m);
 	}
 
 	int lookat = 0;
@@ -45,13 +45,13 @@ int main (int argc, char* argv[])
 	while(1)
 	{		
 		map_draw(e->known_map,NULL);
-		foreach(entity,e->seen)
-		{
-			entity_draw(*itr,NULL);
-		}
 		foreach(item,e->seen_items)
 		{
 			item_draw(*itr,NULL);
+		}
+		foreach(entity,e->seen)
+		{
+			entity_draw(*itr,NULL);
 		}
 		foreach(entity,m->entities)
 		{
@@ -64,6 +64,7 @@ int main (int argc, char* argv[])
 		if(key.c == 'q') { break; }
 		if(key.c == 'n') { lookat = (lookat+1)%TCOD_list_size(m->entities);
 			               e = TCOD_list_get(m->entities,lookat); }
+		if(key.c == 'i') { printf("%d items\n",TCOD_list_size(e->inventory)); }
 	}
 	map_delete(m);
 }

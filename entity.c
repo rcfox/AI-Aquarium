@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <libtcod.h>
+#include <assert.h>
 #include "entity.h"
 #include "map.h"
 #include "item.h"
@@ -20,6 +21,7 @@ entity* entity_new(int x, int y, char c, TCOD_color_t color)
 	e->seen = TCOD_list_new();
 	e->seen_items = TCOD_list_new();
 	e->goal_stack = TCOD_list_new();
+	e->inventory = TCOD_list_new();
 
 	// Make sure the entity always has something to do so that we don't crash!
 	entity_add_goal(e,goal_new_nothing(e));
@@ -28,6 +30,10 @@ entity* entity_new(int x, int y, char c, TCOD_color_t color)
 
 void entity_delete(entity* e)
 {
+	foreach(item,e->inventory)
+	{
+		item_delete(*itr);
+	}
 	foreach(goal,e->goal_stack)
 	{
 		goal_delete(*itr);
@@ -43,6 +49,7 @@ void entity_delete(entity* e)
 	TCOD_list_delete(e->seen);
 	TCOD_list_delete(e->seen_items);
 	TCOD_list_delete(e->goal_stack);
+	TCOD_list_delete(e->inventory);
 	free(e);
 }
 
@@ -164,4 +171,22 @@ void entity_add_goal(entity* e, struct goal* g)
 void entity_do_goal(entity* e)
 {
 	goal_do(TCOD_list_peek(e->goal_stack));
+}
+
+void entity_get_item(entity* e, item* i)
+{
+	assert(i->owner == NULL);
+	assert(e->x == i->x && e->y == i->y);
+
+	map_remove_item(e->host_map,i);
+	TCOD_list_push(e->inventory,i);
+	item_set_owner(i,e);
+}
+
+void entity_drop_item(entity* e, item* i)
+{
+	i->x = e->x;
+	i->y = e->y;
+	TCOD_list_remove_fast(e->inventory,i);
+	item_set_map(i,e->host_map);
 }

@@ -1,9 +1,12 @@
 #include <stdio.h>
 #include <math.h>
 #include "goals/explore.h"
+#include "goals/get_item.h"
 #include "goal.h"
 #include "entity.h"
 #include "map.h"
+#include "item.h"
+#include "util.h"
 
 static void find_closest_unexplored(entity* e, int* x, int* y)
 {
@@ -33,6 +36,14 @@ static void find_closest_unexplored(entity* e, int* x, int* y)
 static bool pre_explore_goal(entity* e, TCOD_list_t params)
 {
 	int x,y;
+	bool found_item = false;
+	foreach(item,e->seen_items)
+	{
+		entity_add_goal(e,goal_new_get_item(e,*itr));
+		found_item = true;
+	}
+	if(found_item) return true;
+	
 	find_closest_unexplored(e,&x,&y);
 	if(x != -1 && y != -1)
 	{

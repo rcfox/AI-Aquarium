@@ -22,9 +22,9 @@ static bool move_goal(entity* e, TCOD_list_t params)
 
 static bool post_move_goal(entity* e, TCOD_list_t params)
 {
-	int x = (long)TCOD_list_get(params,0);
-	int y = (long)TCOD_list_get(params,1);
-	printf("Arrived at (%d,%d)!\n",x,y);
+	/* int x = (long)TCOD_list_get(params,0); */
+	/* int y = (long)TCOD_list_get(params,1); */
+	/* printf("Arrived at (%d,%d)!\n",x,y); */
 	return true;
 }
 
