@@ -6,7 +6,6 @@
 #include "entity.h"
 #include "util.h"
 #include "goal.h"
-#include "goals/nothing.h"
 #include "goals/move.h"
 #include "goals/explore.h"
 
@@ -28,6 +27,8 @@ int main (int argc, char* argv[])
 		
 		goal* g = goal_new_move(e,3,3);
 		goal_add_subgoal(g,goal_new_move(e,78,58));
+		goal_add_subgoal(g,goal_new_move(e,78,3));
+		goal_add_subgoal(g,goal_new_move(e,3,58));
 		entity_add_goal(e,g);
 	}
 
