@@ -4,6 +4,7 @@
 #include "map.h"
 #include "util.h"
 #include "goal.h"
+#include "goals/nothing.h"
 
 entity* entity_new(int x, int y, char c, TCOD_color_t color)
 {
@@ -16,16 +17,23 @@ entity* entity_new(int x, int y, char c, TCOD_color_t color)
 	e->known_map = NULL;
 	e->path = NULL;
 	e->seen = TCOD_list_new();
-	e->goal = NULL;
+	e->goal_stack = TCOD_list_new();
+
+	// Make sure the entity always has something to do so that we don't crash!
+	entity_add_goal(e,goal_new_nothing(e));
 	return e;
 }
 
 void entity_delete(entity* e)
 {
+	foreach(goal,e->goal_stack)
+	{
+		goal_delete(*itr);
+	}
 	if(e->path) TCOD_path_delete(e->path);
 	if(e->known_map) map_delete(e->known_map);
-	if(e->goal) goal_delete(e->goal);
 	TCOD_list_delete(e->seen);
+	TCOD_list_delete(e->goal_stack);
 	free(e);
 }
 
@@ -112,4 +120,18 @@ bool entity_follow_path(entity* e)
 bool entity_at_destination(entity* e)
 {
 	return TCOD_path_is_empty(e->path);
+}
+
+void entity_add_goal(entity* e, struct goal* g)
+{
+	TCOD_list_push(e->goal_stack,g);
+	foreach(goal,g->subgoals)
+	{
+		entity_add_goal(e,*itr);
+	}
+}
+
+void entity_do_goal(entity* e)
+{
+	goal_do(TCOD_list_peek(e->goal_stack));
 }

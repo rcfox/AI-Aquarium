@@ -6,6 +6,7 @@
 #include "entity.h"
 #include "util.h"
 #include "goal.h"
+#include "goals/nothing.h"
 #include "goals/move.h"
 #include "goals/explore.h"
 
@@ -23,9 +24,11 @@ int main (int argc, char* argv[])
 		int x, y;
 		map_random_free_spot(m,&x,&y);
 		entity* e = entity_new(x,y,'@',TCOD_color_RGB(rand()%255,rand()%255,rand()%255));
-		map_add_entity(m,e);
-
-		e->goal = goal_new_explore(e);
+		map_add_entity(m,e);		
+		
+		goal* g = goal_new_move(e,3,3);
+		goal_add_subgoal(g,goal_new_move(e,78,58));
+		entity_add_goal(e,g);
 	}
 
 	int lookat = 0;
@@ -41,7 +44,7 @@ int main (int argc, char* argv[])
 		{
 			entity* e = *itr;
 			entity_look(e);
-			goal_do(e->goal);
+			entity_do_goal(e);
 		}
 		TCOD_console_flush();
 		TCOD_key_t key = TCOD_console_check_for_keypress(TCOD_KEY_PRESSED);

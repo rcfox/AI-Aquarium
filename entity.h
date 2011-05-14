@@ -14,7 +14,7 @@ typedef struct entity
 	struct map* known_map; // What the entity knows about host_map
 	TCOD_path_t path; // The path that the entity is currently following
 	TCOD_list_t seen; // Other seen entities;
-	struct goal* goal;
+	TCOD_list_t goal_stack;
 
 	TCOD_color_t color; // Colour to draw with
 	char c; // The character to represent the entity
@@ -33,5 +33,8 @@ void entity_set_map(entity* e, struct map* m);
 bool entity_set_destination(entity* e, int x, int y);
 bool entity_follow_path(entity* e);
 bool entity_at_destination(entity* e);
+
+void entity_add_goal(entity* e, struct goal* g);
+void entity_do_goal(entity* e);
 
 #endif
