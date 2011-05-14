@@ -7,6 +7,7 @@
 #include "util.h"
 #include "goal.h"
 #include "goals/move.h"
+#include "goals/explore.h"
 
 int main (int argc, char* argv[])
 {
@@ -24,7 +25,7 @@ int main (int argc, char* argv[])
 		entity* e = entity_new(x,y,'@',TCOD_color_RGB(rand()%255,rand()%255,rand()%255));
 		map_add_entity(m,e);
 
-		e->goal = goal_new(e,&pre_move_goal,&move_goal,&post_move_goal,3,3,NULL);
+		e->goal = GOAL(e,explore);
 	}
 
 	int lookat = 0;

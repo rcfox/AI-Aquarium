@@ -5,6 +5,8 @@
 
 struct entity;
 
+#define GOAL(owner,type,parameters...) goal_new((owner),&pre_##type##_goal,&type##_goal,&post_##type##_goal,##parameters,NULL);
+
 typedef struct goal
 {
 	struct entity* owner;
