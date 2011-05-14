@@ -4,14 +4,10 @@
 #include "entity.h"
 #include "item.h"
 
-static bool pre_get_item_goal(entity* e, TCOD_list_t params)
-{
-	item* i = TCOD_list_get(params,0);
-	if(e->x == i->x && e->y == i->y) return true;
-	
-	entity_add_goal(e,goal_new_move(e,i->x,i->y));
-	return false;
-}
+/* static bool pre_get_item_goal(entity* e, TCOD_list_t params) */
+/* { */
+/* 	return true; */
+/* } */
 
 static bool get_item_goal(entity* e, TCOD_list_t params)
 {
@@ -24,12 +20,14 @@ static bool get_item_goal(entity* e, TCOD_list_t params)
 	return true;
 }
 
-static bool post_get_item_goal(entity* e, TCOD_list_t params)
-{
-	return true;
-}
+/* static bool post_get_item_goal(entity* e, TCOD_list_t params) */
+/* { */
+/* 	return true; */
+/* } */
 
 goal* goal_new_get_item(entity* owner, item* item)
 {
-	return goal_new(owner,&pre_get_item_goal,&get_item_goal,&post_get_item_goal,item,NULL);
+	goal* g = goal_new(owner,NULL,&get_item_goal,NULL,item,NULL);
+	goal_add_subgoal(g,goal_new_move(owner,item->x,item->y));
+	return g;
 }
