@@ -191,9 +191,8 @@ void entity_drop_item(entity* e, item* i)
 	item_set_map(i,e->host_map);
 }
 
-void entity_make_item(entity* e, item* new_item)
+void entity_make_item(entity* e, item_type it)
 {
-	item_type it = new_item->type;
 	bool have_requirements = true;
 	item* components[MAX_RECIPE_COMPONENTS] = {NULL};
 	for(int i = 0; i < MAX_RECIPE_COMPONENTS; ++i)
@@ -223,6 +222,7 @@ void entity_make_item(entity* e, item* new_item)
 	}
 	if(have_requirements)
 	{
+		item* new_item = item_constructors[it](e->x,e->y);
 		TCOD_list_push(e->inventory,new_item);
 		item_set_owner(new_item,e);
 		for(int i = 0; i < MAX_RECIPE_COMPONENTS; ++i)

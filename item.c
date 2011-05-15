@@ -70,3 +70,10 @@ void item_set_owner(item* i, entity* e)
 	}
 #include "items.def"
 #undef DEFINE_ITEM
+
+item_constructor item_constructors[] =
+{
+#define DEFINE_ITEM(name,character,colour,recipe...) [ITEM_##name] = &item_new_##name,
+#include "items.def"
+#undef DEFINE_ITEM
+};

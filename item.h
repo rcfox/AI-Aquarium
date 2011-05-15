@@ -8,6 +8,7 @@ struct map;
 struct item;
 
 typedef void (*item_func)(struct item* item, TCOD_list_t params);
+typedef struct item* (*item_constructor)(int x, int y);
 
 typedef enum item_type
 {
@@ -15,6 +16,7 @@ typedef enum item_type
 #define DEFINE_ITEM(name,char,colour,recipe...) ITEM_##name,
 #include "items.def"
 #undef DEFINE_ITEM
+	NUM_ITEM_TYPES
 } item_type;
 
 typedef struct item
@@ -34,6 +36,7 @@ typedef struct item
 
 #define MAX_RECIPE_COMPONENTS 8
 extern item_type recipes[][MAX_RECIPE_COMPONENTS];
+item_constructor item_constructors[NUM_ITEM_TYPES];
 
 item* item_new(const char* name, int x, int y, char c, TCOD_color_t color, item_type type, item_func effect);
 void item_delete(item* i);
