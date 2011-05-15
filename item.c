@@ -3,7 +3,7 @@
 #include "entity.h"
 #include "map.h"
 
-item_type recipes[][8] =
+item_type recipes[][MAX_RECIPE_COMPONENTS] =
 {
 	// Clean up for empty slots
 #define ITEM_ ITEM_nothing

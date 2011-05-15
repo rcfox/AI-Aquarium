@@ -32,6 +32,9 @@ typedef struct item
 	char c; // The character to represent the item
 } item;
 
+#define MAX_RECIPE_COMPONENTS 8
+extern item_type recipes[][MAX_RECIPE_COMPONENTS];
+
 item* item_new(const char* name, int x, int y, char c, TCOD_color_t color, item_type type, item_func effect);
 void item_delete(item* i);
 
