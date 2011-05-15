@@ -10,6 +10,7 @@
 #include "goals/move.h"
 #include "goals/explore.h"
 #include "goals/search.h"
+#include "goals/make_item.h"
 
 int main (int argc, char* argv[])
 {
@@ -31,7 +32,8 @@ int main (int argc, char* argv[])
 		/* goal_add_subgoal(g,goal_new_move(e,78,58)); */
 		/* goal_add_subgoal(g,goal_new_move(e,78,3)); */
 		/* goal_add_subgoal(g,goal_new_move(e,3,58)); */
-		entity_add_goal(e,goal_new_search(e,ITEM_rock,3));
+		//entity_add_goal(e,goal_new_search(e,ITEM_rock,3));
+		entity_add_goal(e,goal_new_make_item(e,ITEM_sharpened_rock));
 	}
 	for(int a = 0; a < 50; ++a)
 	{
