@@ -1,4 +1,4 @@
-
+DEFINE_ITEM(nothing,' ',black)
 DEFINE_ITEM(rock,'*',grey)
 DEFINE_ITEM(sharpened_rock,'*',grey, rock,rock)
 DEFINE_ITEM(pointy_rock,'*',grey, rock,rock)
@@ -7,5 +7,3 @@ DEFINE_ITEM(branch,'/',sepia)
 
 DEFINE_ITEM(crude_axe,'(',grey, sharpened_rock,branch)
 DEFINE_ITEM(crude_hammer,'(',grey, rock,branch)
-
-DEFINE_ITEM(nothing,' ',black)
