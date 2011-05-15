@@ -36,7 +36,15 @@ int main (int argc, char* argv[])
 	{
 		int x, y;
 		map_random_free_spot(m,&x,&y);
-		item* i = item_new(x,y,'$',TCOD_green,0,NULL);
+		item* i;
+		if(rand()%2)
+		{
+			i = item_new_branch(x,y);
+		}
+		else
+		{
+			i = item_new_rock(x,y);
+		}
 		item_set_map(i,m);
 	}
 
@@ -64,7 +72,13 @@ int main (int argc, char* argv[])
 		if(key.c == 'q') { break; }
 		if(key.c == 'n') { lookat = (lookat+1)%TCOD_list_size(m->entities);
 			               e = TCOD_list_get(m->entities,lookat); }
-		if(key.c == 'i') { printf("%d items\n",TCOD_list_size(e->inventory)); }
+		if(key.c == 'i')
+		{
+			foreach(item,e->inventory)
+			{
+				printf("%s\n",(*itr)->name);
+			}
+		}
 	}
 	map_delete(m);
 }
