@@ -190,3 +190,57 @@ void entity_drop_item(entity* e, item* i)
 	TCOD_list_remove_fast(e->inventory,i);
 	item_set_map(i,e->host_map);
 }
+
+void entity_make_item(entity* e, item* new_item)
+{
+	item_type it = new_item->type;
+	bool have_requirements = true;
+	item* components[MAX_RECIPE_COMPONENTS] = {NULL};
+	for(int i = 0; i < MAX_RECIPE_COMPONENTS; ++i)
+	{
+		if(recipes[it][i] == ITEM_nothing)
+		{
+			components[i] = NULL;
+		}
+		else
+		{
+			foreach(item,e->inventory)
+			{
+				item* item = *itr;
+				if(item->type == recipes[it][i])
+				{
+					components[i] = item;
+					TCOD_list_remove_fast(e->inventory,item);
+					break;
+				}
+			}
+			if(components[i] == NULL)
+			{
+				have_requirements = false;
+				break;
+			}
+		}
+	}
+	if(have_requirements)
+	{
+		TCOD_list_push(e->inventory,new_item);
+		item_set_owner(new_item,e);
+		for(int i = 0; i < MAX_RECIPE_COMPONENTS; ++i)
+		{
+			if(components[i])
+			{
+				item_delete(components[i]);
+			}
+		}
+	}
+	else
+	{
+		for(int i = 0; i < MAX_RECIPE_COMPONENTS; ++i)
+		{
+			if(components[i])
+			{
+				TCOD_list_push(e->inventory,components[i]);
+			}
+		}
+	}
+}
