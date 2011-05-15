@@ -9,6 +9,7 @@
 #include "goal.h"
 #include "goals/move.h"
 #include "goals/explore.h"
+#include "goals/search.h"
 
 int main (int argc, char* argv[])
 {
@@ -18,7 +19,7 @@ int main (int argc, char* argv[])
 	map* m = map_new(80,60,'.');
 	map_randomize(m,6);
 
-	int num_entities = 5;
+	int num_entities = 1;
 	for(int a = 0; a < num_entities; ++a)
 	{
 		int x, y;
@@ -30,7 +31,7 @@ int main (int argc, char* argv[])
 		/* goal_add_subgoal(g,goal_new_move(e,78,58)); */
 		/* goal_add_subgoal(g,goal_new_move(e,78,3)); */
 		/* goal_add_subgoal(g,goal_new_move(e,3,58)); */
-		entity_add_goal(e,goal_new_explore(e));
+		entity_add_goal(e,goal_new_search(e,ITEM_rock,3));
 	}
 	for(int a = 0; a < 50; ++a)
 	{
@@ -51,7 +52,7 @@ int main (int argc, char* argv[])
 	int lookat = 0;
 	entity* e = TCOD_list_get(m->entities,lookat);
 	while(1)
-	{		
+	{
 		map_draw(e->known_map,NULL);
 		foreach(item,e->seen_items)
 		{
@@ -74,10 +75,21 @@ int main (int argc, char* argv[])
 			               e = TCOD_list_get(m->entities,lookat); }
 		if(key.c == 'i')
 		{
+			printf("------\n");
 			foreach(item,e->inventory)
 			{
 				printf("%s\n",(*itr)->name);
 			}
+			printf("------\n");
+		}
+		if(key.c == 'g')
+		{
+			printf("------\n");
+			foreach(goal,e->goal_stack)
+			{
+				printf("%s\n",(*itr)->name);
+			}
+			printf("------\n");
 		}
 	}
 	map_delete(m);
