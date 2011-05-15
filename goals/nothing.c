@@ -19,5 +19,5 @@ static bool post_nothing_goal(entity* e, TCOD_list_t params)
 
 goal* goal_new_nothing(entity* owner)
 {
-	return goal_new(owner,&pre_nothing_goal,&nothing_goal,&post_nothing_goal,NULL);
+	return goal_new("nothing",owner,&pre_nothing_goal,&nothing_goal,&post_nothing_goal,NULL);
 }

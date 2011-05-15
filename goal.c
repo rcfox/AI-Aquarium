@@ -6,9 +6,10 @@
 #include "entity.h"
 #include "util.h"
 
-goal* goal_new(struct entity* e, goal_func pre, goal_func gf, goal_func post, ...)
+goal* goal_new(const char* name, struct entity* e, goal_func pre, goal_func gf, goal_func post, ...)
 {
-	goal* g = malloc(sizeof(goal));	
+	goal* g = malloc(sizeof(goal));
+	g->name = name;
 	g->owner = e;
 	g->pre_goal = pre;
 	g->goal_func = gf;

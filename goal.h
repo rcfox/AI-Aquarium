@@ -9,6 +9,7 @@ typedef bool (*goal_func)(struct entity* owner, TCOD_list_t params);
 
 typedef struct goal
 {
+	const char* name;
 	struct entity* owner;
 	goal_func pre_goal;
 	goal_func goal_func;
@@ -18,7 +19,7 @@ typedef struct goal
 	TCOD_list_t subgoals;
 } goal;
 
-goal* goal_new(struct entity* owner, goal_func pre_goal, goal_func goal, goal_func post_goal, ...);
+goal* goal_new(const char* name, struct entity* owner, goal_func pre_goal, goal_func goal, goal_func post_goal, ...);
 void goal_delete(goal* g);
 
 void goal_add_subgoal(goal* g, goal* subgoal);

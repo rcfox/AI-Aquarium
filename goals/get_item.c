@@ -27,7 +27,7 @@ static bool get_item_goal(entity* e, TCOD_list_t params)
 
 goal* goal_new_get_item(entity* owner, item* item)
 {
-	goal* g = goal_new(owner,NULL,&get_item_goal,NULL,item,NULL);
+	goal* g = goal_new("get item",owner,NULL,&get_item_goal,NULL,item,NULL);
 	goal_add_subgoal(g,goal_new_move(owner,item->x,item->y));
 	return g;
 }

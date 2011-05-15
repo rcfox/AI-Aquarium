@@ -66,5 +66,5 @@ static bool post_explore_goal(entity* e, TCOD_list_t params)
 
 goal* goal_new_explore(entity* owner)
 {
-	return goal_new(owner,&pre_explore_goal,&explore_goal,&post_explore_goal,NULL);
+	return goal_new("explore",owner,&pre_explore_goal,&explore_goal,&post_explore_goal,NULL);
 }

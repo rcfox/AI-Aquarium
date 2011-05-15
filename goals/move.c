@@ -30,5 +30,5 @@ static bool post_move_goal(entity* e, TCOD_list_t params)
 
 goal* goal_new_move(struct entity* owner, int x, int y)
 {
-	return goal_new(owner,&pre_move_goal,&move_goal,&post_move_goal,x,y,NULL);
+	return goal_new("move",owner,&pre_move_goal,&move_goal,&post_move_goal,x,y,NULL);
 }
