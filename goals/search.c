@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "goals/search.h"
-#include "goals/get_item.h"
+#include "goals/pickup_item.h"
 #include "goals/move.h"
 #include "entity.h"
 #include "item.h"
@@ -25,7 +25,7 @@ static bool search_goal(entity* e, TCOD_list_t params)
 		item* i = *itr;
 		if(i->type == type)
 		{
-			entity_add_goal(e,goal_new_get_item(e,i));
+			entity_add_goal(e,goal_new_pickup_item(e,i));
 			return false;
 		}
 	}

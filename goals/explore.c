@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <math.h>
 #include "goals/explore.h"
-#include "goals/get_item.h"
+#include "goals/pickup_item.h"
 #include "goals/move.h"
 #include "goal.h"
 #include "entity.h"
@@ -40,7 +40,7 @@ static bool pre_explore_goal(entity* e, TCOD_list_t params)
 	bool found_item = false;
 	foreach(item,e->seen_items)
 	{
-		entity_add_goal(e,goal_new_get_item(e,*itr));
+		entity_add_goal(e,goal_new_pickup_item(e,*itr));
 		found_item = true;
 	}
 	if(found_item) return true;
