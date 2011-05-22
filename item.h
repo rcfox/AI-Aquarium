@@ -28,15 +28,15 @@ typedef struct item
 
 	item_type type;
 	item_func use_effect;
-
-	const char* name;
+	
 	TCOD_color_t color; // Colour to draw with
 	char c; // The character to represent the item
 } item;
 
 #define MAX_RECIPE_COMPONENTS 8
 extern item_type recipes[][MAX_RECIPE_COMPONENTS];
-item_constructor item_constructors[NUM_ITEM_TYPES];
+extern item_constructor item_constructors[NUM_ITEM_TYPES];
+extern const char* item_names[NUM_ITEM_TYPES];
 
 item* item_new(const char* name, int x, int y, char c, TCOD_color_t color, item_type type, item_func effect);
 void item_delete(item* i);

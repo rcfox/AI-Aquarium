@@ -22,6 +22,7 @@ entity* entity_new(int x, int y, char c, TCOD_color_t color)
 	e->seen_items = TCOD_list_new();
 	e->goal_stack = TCOD_list_new();
 	e->inventory = TCOD_list_new();
+	e->getting_item = false;
 
 	// Make sure the entity always has something to do so that we don't crash!
 	entity_add_goal(e,goal_new_nothing(e));
@@ -162,10 +163,6 @@ bool entity_at_destination(entity* e)
 void entity_add_goal(entity* e, struct goal* g)
 {
 	TCOD_list_push(e->goal_stack,g);
-	foreach(goal,g->subgoals)
-	{
-		entity_add_goal(e,*itr);
-	}
 }
 
 void entity_do_goal(entity* e)
@@ -191,7 +188,7 @@ void entity_drop_item(entity* e, item* i)
 	item_set_map(i,e->host_map);
 }
 
-void entity_make_item(entity* e, item_type it)
+bool entity_make_item(entity* e, item_type it)
 {
 	bool have_requirements = true;
 	item* components[MAX_RECIPE_COMPONENTS] = {NULL};
@@ -232,6 +229,7 @@ void entity_make_item(entity* e, item_type it)
 				item_delete(components[i]);
 			}
 		}
+		return true;
 	}
 	else
 	{
@@ -242,5 +240,6 @@ void entity_make_item(entity* e, item_type it)
 				TCOD_list_push(e->inventory,components[i]);
 			}
 		}
+		return false;
 	}
 }

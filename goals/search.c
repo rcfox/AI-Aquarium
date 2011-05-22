@@ -8,7 +8,7 @@
 #include "item.h"
 #include "util.h"
 
-static bool search_goal(entity* e, TCOD_list_t params)
+static bool search_goal(goal* g, entity* e, TCOD_list_t params)
 {
 	item_type type = (item_type)TCOD_list_get(params,0);
 	int how_many = (long)TCOD_list_get(params,1);
@@ -36,5 +36,7 @@ static bool search_goal(entity* e, TCOD_list_t params)
 
 goal* goal_new_search(struct entity* owner, item_type type, int how_many)
 {
-	return goal_new("search",owner,NULL,&search_goal,NULL,type,how_many,NULL);
+	goal* g = goal_new(owner,&search_goal,NULL,NULL,type,how_many,NULL);
+	sprintf(g->name,"search: %s x%d",item_names[type],how_many);
+	return g;
 }

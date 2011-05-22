@@ -27,26 +27,31 @@ int main (int argc, char* argv[])
 		map_random_free_spot(m,&x,&y);
 		entity* e = entity_new(x,y,'@',TCOD_color_RGB(rand()%255,rand()%255,rand()%255));
 		map_add_entity(m,e);
+		entity_add_goal(e,goal_new_explore(e));
 		
 		/* goal* g = goal_new_move(e,3,3); */
 		/* goal_add_subgoal(g,goal_new_move(e,78,58)); */
 		/* goal_add_subgoal(g,goal_new_move(e,78,3)); */
 		/* goal_add_subgoal(g,goal_new_move(e,3,58)); */
 		//entity_add_goal(e,goal_new_search(e,ITEM_rock,3));
-		entity_add_goal(e,goal_new_make_item(e,ITEM_sharpened_rock));
+		entity_add_goal(e,goal_new_make_item(e,ITEM_house));
 	}
-	for(int a = 0; a < 50; ++a)
+	for(int a = 0; a < 100; ++a)
 	{
 		int x, y;
 		map_random_free_spot(m,&x,&y);
 		item* i;
-		if(rand()%2)
+		if(rand()%3)
 		{
 			i = item_new_branch(x,y);
 		}
-		else
+		else if(rand()%2)
 		{
 			i = item_new_rock(x,y);
+		}
+		else
+		{
+			i = item_new_tree(x,y);
 		}
 		item_set_map(i,m);
 	}
@@ -80,7 +85,7 @@ int main (int argc, char* argv[])
 			printf("------\n");
 			foreach(item,e->inventory)
 			{
-				printf("%s\n",(*itr)->name);
+				printf("%s\n",item_names[(*itr)->type]);
 			}
 			printf("------\n");
 		}
@@ -89,9 +94,13 @@ int main (int argc, char* argv[])
 			printf("------\n");
 			foreach(goal,e->goal_stack)
 			{
-				printf("%s\n",(*itr)->name);
+				goal_display(*itr);
 			}
 			printf("------\n");
+		}
+		if(key.c == 'x')
+		{
+			printf("(%d,%d)\n",e->x,e->y);
 		}
 	}
 	map_delete(m);

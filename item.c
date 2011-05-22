@@ -22,10 +22,16 @@ item_type recipes[][MAX_RECIPE_COMPONENTS] =
 #undef DEFINE_ITEM
 };
 
+const char* item_names[] =
+{
+#define DEFINE_ITEM(name,character,colour,recipe...) [ITEM_##name] = #name,
+#include "items.def"
+#undef DEFINE_ITEM
+};
+
 item* item_new(const char* name, int x, int y, char c, TCOD_color_t color, item_type type, item_func effect)
 {
 	item* i = malloc(sizeof(item));
-	i->name = name;
 	i->x = x;
 	i->y = y;
 	i->c = c;

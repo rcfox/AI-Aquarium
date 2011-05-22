@@ -1,34 +1,41 @@
 #include <stdio.h>
+#include <libtcod.h>
 #include "goals/move.h"
 #include "entity.h"
 
-static bool pre_move_goal(entity* e, TCOD_list_t params)
+static bool move_completed(goal* g, entity* e, TCOD_list_t params)
 {
 	int x = (long)TCOD_list_get(params,0);
 	int y = (long)TCOD_list_get(params,1);
-	entity_set_destination(e,x,y);
-	return true;
+	return (e->x == x && e->y == y);
 }
 
-static bool move_goal(entity* e, TCOD_list_t params)
+static bool move_failed(goal* g, entity* e, TCOD_list_t params)
 {
-	if(!entity_at_destination(e))
+	int x = (long)TCOD_list_get(params,0);
+	int y = (long)TCOD_list_get(params,1);
+
+	TCOD_console_put_char_ex(NULL,x,y,'X',TCOD_red,TCOD_black);
+	
+	return (!g->first_time && (e->x != x || e->y != y) && TCOD_path_size(e->path) == 0 );
+}
+
+static bool move_doit(goal* g, entity* e, TCOD_list_t params)
+{
+	int x = (long)TCOD_list_get(params,0);
+	int y = (long)TCOD_list_get(params,1);
+	if(g->first_time)
 	{
-		entity_follow_path(e);
-		return false;
+		entity_set_destination(e,x,y);
+		g->first_time = false;
 	}
-	return true;
-}
-
-static bool post_move_goal(entity* e, TCOD_list_t params)
-{
-	/* int x = (long)TCOD_list_get(params,0); */
-	/* int y = (long)TCOD_list_get(params,1); */
-	/* printf("Arrived at (%d,%d)!\n",x,y); */
+	entity_follow_path(e);
 	return true;
 }
 
 goal* goal_new_move(struct entity* owner, int x, int y)
 {
-	return goal_new("move",owner,&pre_move_goal,&move_goal,&post_move_goal,x,y,NULL);
+	goal* g = goal_new(owner,&move_completed,&move_failed,&move_doit,x,y,NULL);
+	sprintf(g->name,"move from (%d,%d) to (%d,%d)",owner->x,owner->y,x,y);
+	return g;
 }

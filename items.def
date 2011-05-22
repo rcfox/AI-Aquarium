@@ -7,3 +7,9 @@ DEFINE_ITEM(branch,'/',sepia)
 
 DEFINE_ITEM(crude_axe,'(',grey, sharpened_rock,branch)
 DEFINE_ITEM(crude_hammer,'(',grey, rock,branch)
+
+DEFINE_ITEM(tree,'T',green)
+DEFINE_ITEM(log,'|',sepia,tree,crude_axe)
+DEFINE_ITEM(board,'|',sepia,log,crude_axe)
+DEFINE_ITEM(wall,'#',grey,board,board,board,board,crude_hammer)
+DEFINE_ITEM(house,'^',grey,wall,wall,wall,wall,crude_hammer)

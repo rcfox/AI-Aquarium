@@ -1,0 +1,9 @@
+#ifndef GOALS_GET_ITEM_H
+#define GOALS_GET_ITEM_H
+
+#include "goals/goals.h"
+#include "item.h"
+
+goal* goal_new_get_item(struct entity* owner, item_type type, int how_many);
+
+#endif
