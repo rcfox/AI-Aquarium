@@ -9,7 +9,7 @@
 #include "goal.h"
 #include "goals/move.h"
 #include "goals/explore.h"
-#include "goals/search.h"
+#include "goals/get_item.h"
 #include "goals/make_item.h"
 
 int main (int argc, char* argv[])
@@ -34,22 +34,23 @@ int main (int argc, char* argv[])
 		/* goal_add_subgoal(g,goal_new_move(e,78,3)); */
 		/* goal_add_subgoal(g,goal_new_move(e,3,58)); */
 		//entity_add_goal(e,goal_new_search(e,ITEM_rock,3));
-		entity_add_goal(e,goal_new_make_item(e,ITEM_house));
+		entity_add_goal(e,goal_new_get_item(e,ITEM_house,1));
 	}
-	for(int a = 0; a < 100; ++a)
+	for(int a = 0; a < 500; ++a)
 	{
 		int x, y;
 		map_random_free_spot(m,&x,&y);
 		item* i;
-		if(rand()%3)
+		int val = rand()%3;
+		if(val == 0)
 		{
 			i = item_new_branch(x,y);
 		}
-		else if(rand()%2)
+		if(val == 1)
 		{
 			i = item_new_rock(x,y);
 		}
-		else
+		if(val == 2)
 		{
 			i = item_new_tree(x,y);
 		}

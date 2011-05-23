@@ -188,7 +188,8 @@ void entity_drop_item(entity* e, item* i)
 	item_set_map(i,e->host_map);
 }
 
-bool entity_make_item(entity* e, item_type it)
+
+bool entity_can_make_item(entity* e, item_type it)
 {
 	bool have_requirements = true;
 	item* components[MAX_RECIPE_COMPONENTS] = {NULL};
@@ -217,29 +218,43 @@ bool entity_make_item(entity* e, item_type it)
 			}
 		}
 	}
-	if(have_requirements)
+	for(int i = 0; i < MAX_RECIPE_COMPONENTS; ++i)
 	{
+		if(components[i] != ITEM_nothing)
+		{
+			TCOD_list_push(e->inventory,components[i]);
+		}
+	}
+	return have_requirements;
+}
+
+bool entity_make_item(entity* e, item_type it)
+{
+	if(entity_can_make_item(e,it))
+	{
+		for(int i = 0; i < MAX_RECIPE_COMPONENTS; ++i)
+		{
+			item_type c = recipes[it][i];
+			if(c != ITEM_nothing && c != ITEM_crude_hammer && c != ITEM_crude_axe)
+			{
+				foreach(item,e->inventory)
+				{
+					item* item = *itr;
+					if(item->type == c)
+					{
+						TCOD_list_remove_fast(e->inventory,item);
+						item_delete(item);
+						break;
+					}
+				}
+			}
+		}
+
 		item* new_item = item_constructors[it](e->x,e->y);
 		TCOD_list_push(e->inventory,new_item);
 		item_set_owner(new_item,e);
-		for(int i = 0; i < MAX_RECIPE_COMPONENTS; ++i)
-		{
-			if(components[i])
-			{
-				item_delete(components[i]);
-			}
-		}
 		return true;
 	}
-	else
-	{
-		for(int i = 0; i < MAX_RECIPE_COMPONENTS; ++i)
-		{
-			if(components[i])
-			{
-				TCOD_list_push(e->inventory,components[i]);
-			}
-		}
-		return false;
-	}
+
+	return false;
 }

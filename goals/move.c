@@ -17,7 +17,11 @@ static bool move_failed(goal* g, entity* e, TCOD_list_t params)
 
 	TCOD_console_put_char_ex(NULL,x,y,'X',TCOD_red,TCOD_black);
 	
-	return (!g->first_time && (e->x != x || e->y != y) && TCOD_path_size(e->path) == 0 );
+	if(!g->first_time && (e->x != x || e->y != y) && TCOD_path_size(e->path) == 0 )
+	{
+		return true;
+	}
+	return false;
 }
 
 static bool move_doit(goal* g, entity* e, TCOD_list_t params)

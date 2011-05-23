@@ -47,6 +47,7 @@ static bool explore_failed(goal* g, entity* e, TCOD_list_t params)
 static bool explore_doit(goal* g, entity* e, TCOD_list_t params)
 {
 	int x,y;
+	e->getting_item = false;
 	if(TCOD_list_size(g->subgoals) == 0)
 	{
 		find_closest_unexplored(e,&x,&y);

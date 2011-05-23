@@ -80,16 +80,18 @@ bool goal_do_subgoal(goal* g)
 	foreach(goal,g->subgoals)
 	{
 		goal* next = *itr;
-		if(next)
+		assert(next);
+		if(next->completed(next,next->owner,next->parameters) || next->failed(next,next->owner,next->parameters))
 		{
-			if(next->completed(next,next->owner,next->parameters) || next->failed(next,next->owner,next->parameters))
+			itr = (goal**)TCOD_list_remove_iterator(g->subgoals,(void**)itr);
+			goal_delete(next);
+			return true;
+		}
+		else
+		{
+			if(next->doit(next,next->owner,next->parameters))
 			{
-				itr = (goal**)TCOD_list_remove_iterator(g->subgoals,(void**)itr);
-				goal_delete(next);
-			}
-			else
-			{
-				if(next->doit(next,next->owner,next->parameters)) return true;
+				return true;
 			}
 		}
 	}

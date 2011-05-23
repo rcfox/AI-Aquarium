@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <assert.h>
 #include "goals/make_item.h"
 #include "goals/get_item.h"
 #include "entity.h"
@@ -8,10 +9,11 @@
 static bool make_item_completed(goal* g, entity* e, TCOD_list_t params)
 {
 	item_type type = (item_type)TCOD_list_get(params,0);
-	foreach(item,e->inventory)
+
+	if(entity_make_item(e,type))
 	{
-		item* i = *itr;
-		if(i->type == type) return true;
+//		printf("Make a %s\n",item_names[type]);
+		return true;
 	}
 	return false;
 }
@@ -30,11 +32,22 @@ static bool make_item_failed(goal* g, entity* e, TCOD_list_t params)
 
 static bool make_item_doit(goal* g, entity* e, TCOD_list_t params)
 {
-	bool can_make = true;
 	item_type type = (item_type)TCOD_list_get(params,0);
-	
-	if(entity_make_item(e,type)) return true;
-
+	if(TCOD_list_size(g->subgoals) == 0 && !entity_can_make_item(e,type))
+	{
+		int components[NUM_ITEM_TYPES] = {0};
+		for(int i = 0; i < MAX_RECIPE_COMPONENTS; ++i)
+		{
+			++components[recipes[type][i]];
+		}
+		for(int i = 1; i < NUM_ITEM_TYPES; ++i)
+		{
+			if(components[i] > 0)
+			{
+				goal_add_subgoal(g,goal_new_get_item(e,i,components[i]));
+			}
+		}
+	}
 	return goal_do_subgoal(g);
 }
 

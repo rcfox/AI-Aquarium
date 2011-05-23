@@ -8,13 +8,24 @@
 static bool pickup_item_completed(goal* g, entity* e, TCOD_list_t params)
 {
 	item* i = TCOD_list_get(params,0);
-	return (i->owner == e);
+	if(i->owner == e)
+	{
+		e->getting_item = false;
+//		printf("Picked up %s\n",item_names[i->type]);
+		return true;
+	}
+	return false;
 }
 
 static bool pickup_item_failed(goal* g, entity* e, TCOD_list_t params)
 {
 	item* i = TCOD_list_get(params,0);
-	return (i->host_map != e->host_map && i->owner != e);
+	if(i->host_map != e->host_map && i->owner != e)
+	{
+		e->getting_item = false;
+		return true;
+	}
+	return false;
 }
 
 static bool pickup_item_doit(goal* g, entity* e, TCOD_list_t params)
@@ -23,7 +34,6 @@ static bool pickup_item_doit(goal* g, entity* e, TCOD_list_t params)
 	if(i->host_map == e->host_map && (e->x == i->x && e->y == i->y))
 	{
 		entity_get_item(e,i);
-		e->getting_item = false;
 		return true;
 	}
 	else

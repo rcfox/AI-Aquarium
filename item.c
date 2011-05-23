@@ -2,6 +2,7 @@
 #include "item.h"
 #include "entity.h"
 #include "map.h"
+#include "util.h"
 
 item_type recipes[][MAX_RECIPE_COMPONENTS] =
 {

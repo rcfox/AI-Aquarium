@@ -13,3 +13,6 @@ DEFINE_ITEM(log,'|',sepia,tree,crude_axe)
 DEFINE_ITEM(board,'|',sepia,log,crude_axe)
 DEFINE_ITEM(wall,'#',grey,board,board,board,board,crude_hammer)
 DEFINE_ITEM(house,'^',grey,wall,wall,wall,wall,crude_hammer)
+
+DEFINE_ITEM(stone_wall,'#',grey,wall,rock,rock,rock,rock)
+DEFINE_ITEM(castle,'^',red,house,house,stone_wall,stone_wall,stone_wall,stone_wall)

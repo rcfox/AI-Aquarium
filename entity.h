@@ -46,6 +46,7 @@ void entity_do_goal(entity* e);
 
 void entity_get_item(entity* e, struct item* i);
 void entity_drop_item(entity* e, struct item* i);
+bool entity_can_make_item(entity* e, item_type it);
 bool entity_make_item(entity* e, item_type it);
 
 #endif
