@@ -57,7 +57,7 @@ static bool get_item_doit(goal* g, entity* e, TCOD_list_t params)
 		{
 			e->getting_item = false;
 //			printf("Got %s x%d\n",item_names[type],how_many);
-			return true;
+			return false; // Return false so that the entity doesn't waste a bunch of turns checking off common items.
 		}
 	}
 
