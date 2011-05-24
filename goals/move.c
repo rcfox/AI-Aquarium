@@ -15,8 +15,6 @@ static bool move_failed(goal* g, entity* e, TCOD_list_t params)
 	int x = (long)TCOD_list_get(params,0);
 	int y = (long)TCOD_list_get(params,1);
 
-	TCOD_console_put_char_ex(NULL,x,y,'X',TCOD_red,TCOD_black);
-	
 	if(!g->first_time && (e->x != x || e->y != y) && TCOD_path_size(e->path) == 0 )
 	{
 		return true;
