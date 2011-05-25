@@ -30,8 +30,6 @@ typedef struct entity
 entity* entity_new(int x, int y, char c, TCOD_color_t color);
 void entity_delete(entity* e);
 
-void entity_draw(entity* e, TCOD_console_t console);
-
 bool entity_move(entity* e, int x, int y);
 void entity_look(entity* e);
 

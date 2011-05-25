@@ -51,11 +51,6 @@ void item_delete(item* i)
 	free(i);
 }
 
-void item_draw(item* i, TCOD_console_t console)
-{
-	TCOD_console_put_char_ex(console,i->x,i->y,i->c,i->color,TCOD_black);
-}
-
 void item_set_map(item* i, map* m)
 {
 	map_add_item(m,i);

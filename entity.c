@@ -66,11 +66,6 @@ void entity_set_map(entity* e, map* m)
 	}
 }
 
-void entity_draw(entity* e, TCOD_console_t console)
-{
-	TCOD_console_put_char_ex(console,e->x,e->y,e->c,e->color,TCOD_black);
-}
-
 bool entity_move(entity* e, int x, int y)
 {
 	if(!TCOD_map_is_walkable(e->host_map->data,x,y)) { return false; }

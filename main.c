@@ -2,6 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <libtcod.h>
+#include "camera.h"
 #include "map.h"
 #include "entity.h"
 #include "item.h"
@@ -17,10 +18,10 @@ int main (int argc, char* argv[])
 	TCOD_console_init_root(80,60,"Test!",0,TCOD_RENDERER_GLSL);
 	TCOD_sys_set_fps(30);
 
-	map* m = map_new(80,60,'.');
+	map* m = map_new(400,400,'.');
 	map_randomize(m,6);
 
-	int num_entities = 1;
+	int num_entities = 32;
 	for(int a = 0; a < num_entities; ++a)
 	{
 		int x, y;
@@ -57,26 +58,29 @@ int main (int argc, char* argv[])
 		item_set_map(i,m);
 	}
 
+	TCOD_list_t cameras = TCOD_list_new(num_entities);
+	TCOD_list_push(cameras,camera_new(m,TCOD_list_get(m->entities,0),40,30,0,0));
+	TCOD_list_push(cameras,camera_new(m,TCOD_list_get(m->entities,1),40,30,40,0));
+	TCOD_list_push(cameras,camera_new(m,TCOD_list_get(m->entities,2),40,30,0,30));
+	TCOD_list_push(cameras,camera_new(m,TCOD_list_get(m->entities,3),40,30,40,30));
 	int lookat = 0;
 	entity* e = TCOD_list_get(m->entities,lookat);
 	while(1)
 	{
-		map_draw(e->known_map,NULL);
-		foreach(item,e->seen_items)
-		{
-			item_draw(*itr,NULL);
-		}
-		foreach(entity,e->seen)
-		{
-			entity_draw(*itr,NULL);
-		}
 		foreach(entity,m->entities)
 		{
 			entity* e = *itr;
 			entity_look(e);
 			entity_do_goal(e);
 		}
+
+		TCOD_console_clear(NULL);
+		foreach(camera,cameras)
+		{
+			camera_draw(*itr);
+		}
 		TCOD_console_flush();
+
 		TCOD_key_t key = TCOD_console_check_for_keypress(TCOD_KEY_PRESSED);
 		if(key.c == 'q') { break; }
 		if(key.c == 'n') { lookat = (lookat+1)%TCOD_list_size(m->entities);

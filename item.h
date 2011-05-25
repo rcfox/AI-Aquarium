@@ -41,8 +41,6 @@ extern const char* item_names[NUM_ITEM_TYPES];
 item* item_new(const char* name, int x, int y, char c, TCOD_color_t color, item_type type, item_func effect);
 void item_delete(item* i);
 
-void item_draw(item* i, TCOD_console_t console);
-
 void item_set_map(item* i, struct map* m);
 void item_set_owner(item* i, struct entity* e);
 

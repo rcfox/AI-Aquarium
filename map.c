@@ -71,21 +71,6 @@ void map_remove_item(map* m, item* i)
 	TCOD_list_remove_fast(m->items,i);
 }
 
-void map_draw(map* m, TCOD_console_t console)
-{
-	int width = TCOD_map_get_width(m->data);
-	int height = TCOD_map_get_height(m->data);
-	for(int y = 0; y < height; ++y)
-	{
-		for(int x = 0; x < width; ++x)
-		{
-			char c = m->display[x+y*width].c;
-			TCOD_color_t color = m->display[x+y*width].color;
-			TCOD_console_put_char_ex(console,x,y,c,color,TCOD_black);
-		}
-	}
-}
-
 void map_copy_data(map* src, map* dest, int x, int y)
 {
 	map_display md = src->display[x+TCOD_map_get_width(src->data)*y];
@@ -174,4 +159,13 @@ void map_random_free_spot(map* m, int* x, int* y)
 		*x = rand()%width;
 		*y = rand()%height;
 	} while(!TCOD_map_is_walkable(m->data,*x,*y));
+}
+
+bool map_check_bounds(map* m, int x, int y)
+{
+	int map_width = TCOD_map_get_width(m->data);
+	int map_height = TCOD_map_get_height(m->data);
+	if(x < 0 || y < 0) return false;
+	if(x >= map_width || y >= map_height) return false;
+	return true;
 }
