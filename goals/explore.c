@@ -13,7 +13,7 @@ static void find_closest_unexplored(entity* e, int* x, int* y)
 {
 	int width = TCOD_map_get_width(e->known_map->data);
 	int height = TCOD_map_get_height(e->known_map->data);
-	for(int r = 1; r < width; ++r)
+	for(int r = 1; r < 10; ++r)
 	{
 		for(float a = 0; a < 2*M_PI; a += 0.01)
 		{
@@ -53,6 +53,11 @@ static bool explore_doit(goal* g, entity* e, TCOD_list_t params)
 		find_closest_unexplored(e,&x,&y);
 		if(x != -1 && y != -1)
 		{
+			goal_add_subgoal(g,goal_new_move(e,x,y));
+		}
+		else
+		{
+			map_random_free_spot(e->known_map,&x,&y);
 			goal_add_subgoal(g,goal_new_move(e,x,y));
 		}
 	}
