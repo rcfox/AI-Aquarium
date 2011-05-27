@@ -31,6 +31,11 @@ entity* entity_new(int x, int y, char c, TCOD_color_t color)
 
 void entity_delete(entity* e)
 {
+	if(e->host_map)
+	{
+		map_remove_entity(e->host_map,e);
+		return;
+	}
 	foreach(item,e->inventory)
 	{
 		item_delete(*itr);

@@ -55,6 +55,7 @@ void map_add_entity(map* m, entity* e)
 void map_remove_entity(map* m, entity* e)
 {
 	TCOD_list_remove_fast(m->entities,e);
+	e->host_map = NULL;
 	entity_delete(e);
 }
 

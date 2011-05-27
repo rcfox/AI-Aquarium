@@ -48,6 +48,10 @@ item* item_new(const char* name, int x, int y, char c, TCOD_color_t color, item_
 
 void item_delete(item* i)
 {
+	if(i->host_map)
+	{
+		map_remove_item(i->host_map,i);
+	}
 	free(i);
 }
 
