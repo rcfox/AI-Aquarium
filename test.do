@@ -1,4 +1,8 @@
-for file in `find . -name 'libtcod*' -prune -o -name 't' -prune -o -name '*.c' -print`; do
+cd t
+sh make-tests.sh > all_tests.c
+cd ..
+
+for file in `find . -name 'libtcod*' -prune -o -name 'main.c' -prune -o -name '*.c' -print`; do
 	DEPS="$DEPS ${file%.c}.o ";
 done
 
@@ -8,3 +12,5 @@ CFLAGS=""
 BASEDIR=`pwd` redo-ifchange $DEPS
 
 gcc $DEPS $LIBS -o $3
+
+./$3 1>&2
