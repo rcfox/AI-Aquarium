@@ -2,6 +2,7 @@
 #include "entity.h"
 #include "map.h"
 #include "item.h"
+#include "util.h"
 
 #include <libtcod.h>
 
@@ -119,6 +120,36 @@ void TestEntityMove(CuTest* tc)
 	map_set_data(m,e->x-1,e->y+1,'.',TCOD_grey,true,true);
 	map_set_data(m,e->x,e->y+1,'.',TCOD_grey,true,true);
 	map_set_data(m,e->x+1,e->y+1,'.',TCOD_grey,true,true);
+}
+
+void TestEntityMakeItem(CuTest* tc)
+{
+	entity* e = entity_new(3,3,'@',TCOD_red);
+	map_add_entity(m,e);
+	item* x[] = {item_new_rock(e->x,e->y),
+	             item_new_branch(e->x,e->y)};
+
+	entity_get_item(e,x[0]);
+	CuAssertTrue(tc,TCOD_list_contains(e->inventory,x[0]));
+	entity_get_item(e,x[1]);
+	CuAssertTrue(tc,TCOD_list_contains(e->inventory,x[1]));
+
+	CuAssertTrue(tc,entity_can_make_item(e,ITEM_crude_hammer));
+	entity_make_item(e,ITEM_crude_hammer);
+
+	bool has_hammer = false;
+	foreach(item,e->inventory)
+	{
+		item* i = *itr;
+		if(i->type == ITEM_crude_hammer)
+		{
+			has_hammer = true;
+			break;
+		}
+	}
+	CuAssertTrue(tc,has_hammer);
+
+	entity_delete(e);
 }
 
 void TestEntityDelete(CuTest* tc)
