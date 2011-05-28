@@ -30,11 +30,13 @@ void map_delete(map* m)
 	{
 		foreach(entity,m->entities)			
 		{
+			(*itr)->host_map = NULL;
 			entity_delete(*itr);
 		}
 		TCOD_list_delete(m->entities);
 		foreach(item,m->items)			
 		{
+			(*itr)->host_map = NULL;
 			item_delete(*itr);
 		}
 		TCOD_list_delete(m->items);
