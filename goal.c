@@ -50,7 +50,7 @@ void goal_add_subgoal(goal* g, goal* subgoal)
 
 void goal_remove_subgoal(goal* g, goal* subgoal)
 {
-	
+	TCOD_list_remove(g->subgoals,subgoal);
 }
 
 bool goal_do(goal* g)
