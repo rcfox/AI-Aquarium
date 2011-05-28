@@ -57,7 +57,7 @@ bool goal_do(goal* g)
 {
 	bool progressed = false;
 	assert(g);
-	if(g->completed(g,g->owner,g->parameters))
+	if(g->completed(g,g->owner,g->parameters) || g->failed(g,g->owner,g->parameters))
 	{
 		goal_delete(TCOD_list_pop(g->owner->goal_stack));
 		return true;
