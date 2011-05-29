@@ -70,7 +70,6 @@ int main (int argc, char* argv[])
 		foreach(entity,m->entities)
 		{
 			entity* e = *itr;
-			entity_look(e);
 			entity_do_goal(e);
 		}
 

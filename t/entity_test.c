@@ -130,9 +130,9 @@ void TestEntityMakeItem(CuTest* tc)
 	             item_new_branch(e->x,e->y)};
 
 	entity_get_item(e,x[0]);
-	CuAssertTrue(tc,TCOD_list_contains(e->inventory,x[0]));
+	CuAssertTrue(tc,entity_has_item(e,x[0]));
 	entity_get_item(e,x[1]);
-	CuAssertTrue(tc,TCOD_list_contains(e->inventory,x[1]));
+	CuAssertTrue(tc,entity_has_item(e,x[1]));
 
 	CuAssertTrue(tc,entity_can_make_item(e,ITEM_crude_hammer));
 	entity_make_item(e,ITEM_crude_hammer);

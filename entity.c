@@ -167,6 +167,7 @@ void entity_add_goal(entity* e, struct goal* g)
 
 void entity_do_goal(entity* e)
 {
+	entity_look(e);
 	goal_do(TCOD_list_peek(e->goal_stack));
 }
 
@@ -257,4 +258,20 @@ bool entity_make_item(entity* e, item_type it)
 	}
 
 	return false;
+}
+
+bool entity_has_item(entity* e, item* i)
+{
+	return TCOD_list_contains(e->inventory,i);
+}
+
+int entity_has_item_type(entity* e, item_type type)
+{
+	int count = 0;
+	foreach(item,e->inventory)
+	{
+		item* i = *itr;
+		if(i->type == type) ++count;
+	}
+	return count;
 }
