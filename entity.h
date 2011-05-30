@@ -47,7 +47,7 @@ void entity_drop_item(entity* e, struct item* i);
 bool entity_can_make_item(entity* e, item_type it);
 bool entity_make_item(entity* e, item_type it);
 
-bool entity_has_item(entity* e, item* i);
+bool entity_has_item(entity* e, struct item* i);
 int entity_has_item_type(entity* e, item_type type);
 
 #endif
