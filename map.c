@@ -159,8 +159,8 @@ void map_random_free_spot(map* m, int* x, int* y)
 	int width = TCOD_map_get_width(m->data);
 	int height = TCOD_map_get_height(m->data);
 	do {
-		*x = rand()%width;
-		*y = rand()%height;
+		*x = rand()%width+1;
+		*y = rand()%height+1;
 	} while(!TCOD_map_is_walkable(m->data,*x,*y));
 }
 
