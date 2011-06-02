@@ -18,7 +18,7 @@ int main (int argc, char* argv[])
 	TCOD_console_init_root(80,60,"Test!",0,TCOD_RENDERER_GLSL);
 	TCOD_sys_set_fps(30);
 
-	map* m = map_new(400,400,'.');
+	map* m = map_new(80,60,'.');
 	map_randomize(m,6);
 
 	int num_entities = 32;

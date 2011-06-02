@@ -1,2 +1,2 @@
-#!/bin/bash
-redo -j3 && LD_LIBRARY_PATH=./libtcod-1.5.1 gdb ./aquarium
+#!/bin/sh
+redo -j3 && gdb ./aquarium
