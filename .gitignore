@@ -1,6 +1,5 @@
 *.o
 TAGS
-terminal.png
 aquarium
 test
 t/all_tests.c
